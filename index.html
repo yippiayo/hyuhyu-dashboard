@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hyuhyu Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root{
+            --bg:#0d0d0d;
+            --card:#181818;
+            --card-hover:#202020;
+            --text:#ffffff;
+            --muted:#b8b8b8;
+            --line:#2c2c2c;
+            --accent:#ffb400;
+        }
+
+        body{
+            margin:0;
+            background: linear-gradient(135deg, #0f0f0f, #1a1a1a);
+            color:var(--text);
+            font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height:100vh;
+        }
+
+        .navbar-custom{
+            background: rgba(0,0,0,0.55);
+            backdrop-filter: blur(10px);
+            border-bottom:1px solid rgba(255,255,255,0.06);
+        }
+
+        .navbar-brand{
+            font-weight:700;
+            letter-spacing:.5px;
+        }
+
+        .hero-section{
+            padding:90px 20px 40px;
+            text-align:center;
+        }
+
+        .hero-badge{
+            display:inline-block;
+            background:rgba(255,180,0,0.12);
+            color:#ffd36c;
+            border:1px solid rgba(255,180,0,0.25);
+            border-radius:999px;
+            padding:8px 16px;
+            font-size:.9rem;
+            margin-bottom:18px;
+        }
+
+        .hero-title{
+            font-size:3rem;
+            font-weight:800;
+            margin-bottom:12px;
+        }
+
+        .hero-subtitle{
+            max-width:900px;
+            margin:0 auto;
+            color:var(--muted);
+            font-size:1.08rem;
+            line-height:1.8;
+        }
+
+        .stats-section{
+            padding:20px;
+        }
+
+        .stat-card{
+            background:linear-gradient(180deg, #181818, #141414);
+            border:1px solid rgba(255,255,255,0.06);
+            border-radius:18px;
+            padding:22px;
+            height:100%;
+            box-shadow:0 8px 30px rgba(0,0,0,0.25);
+        }
+
+        .stat-label{
+            color:var(--muted);
+            font-size:.95rem;
+        }
+
+        .stat-value{
+            font-size:2rem;
+            font-weight:800;
+            margin-top:8px;
+        }
+
+        .menu-section{
+            padding:35px 20px 20px;
+        }
+
+        .section-title{
+            font-size:1.6rem;
+            font-weight:700;
+            margin-bottom:20px;
+        }
+
+        .menu-card{
+            background: var(--card);
+            border:1px solid rgba(255,255,255,0.06);
+            border-radius:20px;
+            padding:28px;
+            transition:all .25s ease;
+            height:100%;
+            color:var(--text);
+            text-decoration:none;
+            display:block;
+            box-shadow:0 8px 24px rgba(0,0,0,0.2);
+        }
+
+        .menu-card:hover{
+            transform:translateY(-6px);
+            background:var(--card-hover);
+            border-color:rgba(255,255,255,0.12);
+        }
+
+        .menu-icon{
+            font-size:2.4rem;
+            margin-bottom:14px;
+        }
+
+        .menu-card h4{
+            font-size:1.25rem;
+            font-weight:700;
+            margin-bottom:10px;
+        }
+
+        .menu-card p{
+            color:var(--muted);
+            margin:0;
+            line-height:1.7;
+        }
+
+        .highlight-box{
+            margin-top:40px;
+            background:linear-gradient(180deg, #181818, #131313);
+            border:1px solid rgba(255,255,255,0.06);
+            border-radius:22px;
+            padding:28px;
+        }
+
+        .highlight-list li{
+            margin-bottom:10px;
+            color:var(--muted);
+        }
+
+        .footer{
+            margin-top:60px;
+            border-top:1px solid rgba(255,255,255,0.06);
+            text-align:center;
+            color:#9f9f9f;
+            padding:24px 20px 36px;
+        }
+
+        .small-muted{
+            color:var(--muted);
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">🏁 Hyuhyu Dashboard</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navMenu">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link active" href="index.html">Beranda</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/website/leaderboard.html">Leaderboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="players.html">Pemain</a></li>
+                    <li class="nav-item"><a class="nav-link" href="map-checkpoint.html">Checkpoint</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero-section">
+        <div class="container">
+            <div class="hero-badge">Website Monitoring Leaderboard Roblox HYUHYU</div>
+            <h1 class="hero-title">Hyuhyu Race Monitoring System</h1>
+            <p class="hero-subtitle">
+                Dashboard ini digunakan untuk menampilkan leaderboard pemain, profil performa pemain, 
+                serta informasi checkpoint pada game Roblox map HYUHYU. Sistem dirancang menggunakan 
+                REST API agar data permainan dapat diakses melalui website secara terpusat dan terstruktur.
+            </p>
+        </div>
+    </section>
+
+    <section class="stats-section">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="stat-card">
+                        <div class="stat-label">Total Pemain Terdaftar</div>
+                        <div class="stat-value" id="statPlayers">128</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="stat-card">
+                        <div class="stat-label">Total Race Tercatat</div>
+                        <div class="stat-value" id="statRaces">946</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="stat-card">
+                        <div class="stat-label">Checkpoint Aktif</div>
+                        <div class="stat-value" id="statCheckpoints">12</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="menu-section">
+        <div class="container">
+            <h2 class="section-title">Menu Dashboard</h2>
+
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <a href="leaderboard.html" class="menu-card">
+                        <div class="menu-icon">🏆</div>
+                        <h4>Leaderboard</h4>
+                        <p>
+                            Menampilkan peringkat pemain berdasarkan waktu tercepat, total race,
+                            serta data performa yang diperoleh dari backend REST API.
+                        </p>
+                    </a>
+                </div>
+
+                <div class="col-md-4">
+                    <a href="players.html" class="menu-card">
+                        <div class="menu-icon">🧑‍🚀</div>
+                        <h4>Profil Pemain</h4>
+                        <p>
+                            Menampilkan daftar pemain, avatar, best time, total race,
+                            checkpoint terakhir, dan riwayat performa secara ringkas.
+                        </p>
+                    </a>
+                </div>
+
+                <div class="col-md-4">
+                    <a href="map-checkpoint.html" class="menu-card">
+                        <div class="menu-icon">🗺️</div>
+                        <h4>Map Checkpoint</h4>
+                        <p>
+                            Menampilkan informasi checkpoint pada map HYUHYU,
+                            tingkat kesulitan, serta deskripsi tiap titik lintasan.
+                        </p>
+                    </a>
+                </div>
+            </div>
+
+            <div class="highlight-box mt-5">
+                <h4 class="mb-3">Tentang Sistem</h4>
+                <p class="small-muted">
+                    Sistem ini dirancang untuk mendukung penelitian mengenai implementasi leaderboard Roblox 
+                    berbasis REST API. Website berfungsi sebagai media monitoring data leaderboard yang 
+                    sebelumnya hanya dapat dilihat di dalam game. Dengan adanya website ini, informasi pemain 
+                    dapat diakses secara lebih fleksibel, terpusat, dan mudah dianalisis.
+                </p>
+
+                <ul class="highlight-list mt-3">
+                    <li>Menampilkan leaderboard pemain berdasarkan waktu tercepat.</li>
+                    <li>Menyediakan profil pemain beserta statistik permainan.</li>
+                    <li>Menyajikan informasi checkpoint map HYUHYU.</li>
+                    <li>Dirancang agar dapat dihubungkan ke backend Node.js + Express dan database MongoDB Atlas.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <p class="mb-1">© 2026 Hyuhyu Race Monitoring System</p>
+        <small>Sistem Leaderboard Roblox Map HYUHYU Berbasis REST API</small>
+    </footer>
+
+    <script>
+        // Dummy statistik awal.
+        // Nanti bisa diganti fetch API:
+        // GET /api/dashboard/stats
+
+        const dashboardStats = {
+            totalPlayers: 128,
+            totalRaces: 946,
+            totalCheckpoints: 12
+        };
+
+        document.getElementById("statPlayers").textContent = dashboardStats.totalPlayers;
+        document.getElementById("statRaces").textContent = dashboardStats.totalRaces;
+        document.getElementById("statCheckpoints").textContent = dashboardStats.totalCheckpoints;
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

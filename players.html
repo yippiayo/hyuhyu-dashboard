@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Leaderboard - Hyuhyu Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root{
+            --bg:#0f0f0f;
+            --card:#181818;
+            --card2:#202020;
+            --text:#fff;
+            --muted:#b5b5b5;
+            --line:#303030;
+            --gold:#ffcc4d;
+            --silver:#d6d6d6;
+            --bronze:#d1a274;
+        }
+
+        body{
+            margin:0;
+            background:var(--bg);
+            color:var(--text);
+            font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height:100vh;
+        }
+
+        .navbar-custom{
+            background:#111;
+            border-bottom:1px solid rgba(255,255,255,0.06);
+        }
+
+        .navbar-brand{
+            font-weight:700;
+        }
+
+        .page-header{
+            padding:50px 20px 20px;
+        }
+
+        .page-title{
+            font-size:2.5rem;
+            font-weight:800;
+            margin-bottom:8px;
+        }
+
+        .page-subtitle{
+            color:var(--muted);
+            max-width:900px;
+            line-height:1.8;
+        }
+
+        .control-card,
+        .table-card,
+        .top-card{
+            background:var(--card);
+            border:1px solid rgba(255,255,255,0.06);
+            border-radius:18px;
+            padding:22px;
+            box-shadow:0 8px 24px rgba(0,0,0,0.2);
+        }
+
+        .top-card{
+            text-align:center;
+            height:100%;
+        }
+
+        .top-rank{
+            font-size:2rem;
+            font-weight:800;
+            margin-bottom:10px;
+        }
+
+        .top-card .avatar{
+            width:78px;
+            height:78px;
+            border-radius:50%;
+            object-fit:cover;
+            margin-bottom:12px;
+            border:3px solid rgba(255,255,255,0.1);
+        }
+
+        .top-card h5{
+            font-weight:700;
+            margin-bottom:6px;
+        }
+
+        .top-card p{
+            color:var(--muted);
+            margin:0;
+        }
+
+        .gold{ border-top:4px solid var(--gold); }
+        .silver{ border-top:4px solid var(--silver); }
+        .bronze{ border-top:4px solid var(--bronze); }
+
+        .search-box input,
+        .filter-box select{
+            background:#111;
+            color:#fff;
+            border:1px solid #333;
+            border-radius:12px;
+            min-height:46px;
+        }
+
+        .search-box input:focus,
+        .filter-box select:focus{
+            background:#151515;
+            color:#fff;
+            box-shadow:none;
+            border-color:#555;
+        }
+
+        .table thead th{
+            border-bottom:1px solid #333 !important;
+            color:#ddd;
+            font-weight:600;
+        }
+
+        .table tbody tr{
+            border-bottom:1px solid #242424;
+        }
+
+        .table tbody tr:hover{
+            background:#1d1d1d;
+        }
+
+        .table td, .table th{
+            padding:14px 12px;
+            vertical-align:middle;
+        }
+
+        .rank-badge{
+            font-weight:800;
+            font-size:1rem;
+            display:inline-flex;
+            align-items:center;
+            justify-content:center;
+            width:36px;
+            height:36px;
+            border-radius:50%;
+            background:#252525;
+        }
+
+        .player-cell{
+            display:flex;
+            align-items:center;
+            gap:12px;
+        }
+
+        .avatar-sm{
+            width:46px;
+            height:46px;
+            border-radius:50%;
+            object-fit:cover;
+        }
+
+        .player-meta small{
+            color:var(--muted);
+            display:block;
+        }
+
+        .footer{
+            text-align:center;
+            color:#9b9b9b;
+            padding:30px 20px;
+            margin-top:40px;
+        }
+
+        .empty-state{
+            color:var(--muted);
+            text-align:center;
+            padding:25px 0;
+        }
+
+        .period-badge{
+            display:inline-block;
+            padding:8px 14px;
+            border-radius:999px;
+            background:#222;
+            color:#ddd;
+            font-size:.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">🏁 Hyuhyu Dashboard</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navMenu">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Beranda</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="leaderboard.html">Leaderboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="players.html">Pemain</a></li>
+                    <li class="nav-item"><a class="nav-link" href="map-checkpoint.html">Checkpoint</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section class="page-header">
+        <div class="container">
+            <h1 class="page-title">Leaderboard Pemain</h1>
+            <p class="page-subtitle">
+                Halaman ini menampilkan peringkat pemain HYUHYU berdasarkan waktu tercepat.
+                Data dapat difilter berdasarkan periode dan dicari berdasarkan username pemain.
+            </p>
+        </div>
+    </section>
+
+    <div class="container mb-4">
+        <div class="row g-4" id="topThreeCards">
+            <!-- Top 3 otomatis dirender -->
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="control-card mb-4">
+            <div class="row g-3 align-items-center">
+                <div class="col-md-6 search-box">
+                    <input id="searchInput" type="text" class="form-control" placeholder="Cari pemain..." />
+                </div>
+                <div class="col-md-3 filter-box">
+                    <select id="periodSelect" class="form-select">
+                        <option value="all">Semua Waktu</option>
+                        <option value="weekly">Mingguan</option>
+                        <option value="daily">Harian</option>
+                    </select>
+                </div>
+                <div class="col-md-3 text-md-end">
+                    <span class="period-badge" id="activePeriodText">Periode: Semua Waktu</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-card">
+            <div class="table-responsive">
+                <table class="table table-dark table-borderless align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th style="width:80px;">#</th>
+                            <th>Pemain</th>
+                            <th>Waktu Tercepat</th>
+                            <th>Total Race</th>
+                            <th>Checkpoint</th>
+                            <th>Terakhir Main</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboardBody"></tbody>
+                </table>
+            </div>
+            <div id="emptyState" class="empty-state d-none">Data pemain tidak ditemukan.</div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p class="mb-1">© 2026 Hyuhyu Race Monitoring System</p>
+        <small>Leaderboard Roblox HYUHYU</small>
+    </footer>
+
+    <script>
+        // =========================
+        // KONFIGURASI API
+        // =========================
+        const API_BASE = "http://localhost:3000/api";
+        const USE_DUMMY_DATA = true;
+
+        // =========================
+        // DATA DUMMY FALLBACK
+        // =========================
+        const dummyLeaderboard = [
+            {
+                userId: "1001",
+                username: "AditSpeed",
+                avatar: "https://tr.rbxcdn.com/30DAY-AvatarHeadshot-310D3527B0D7F0E55D1E76D7A4F0D2A1-Png/150/150/AvatarHeadshot/Webp/noFilter",
+                bestTime: 41.25,
+                totalRace: 32,
+                checkpoint: 12,
+                lastPlayed: "2026-06-20 19:12"
+            },
+            {
+                userId: "1002",
+                username: "NikoRunner",
+                avatar: "https://tr.rbxcdn.com/30DAY-AvatarHeadshot-85B06A0B5D21B1C1A2E2783D5D65A901-Png/150/150/AvatarHeadshot/Webp/noFilter",
+                bestTime: 43.10,
+                totalRace: 27,
+                checkpoint: 12,
+                lastPlayed: "2026-06-20 18:30"
+            },
+            {
+                userId: "1003",
+                username: "ZahraDash",
+                avatar: "https://tr.rbxcdn.com/30DAY-AvatarHeadshot-4A69F83B3D92F3B82C77C6D0D83C102C-Png/150/150/AvatarHeadshot/Webp/noFilter",
+                bestTime: 44.02,
+                totalRace: 41,
+                checkpoint: 11,
+                lastPlayed: "2026-06-20 17:55"
+            },
+            {
+                userId: "1004",
+                username: "LiaSprint",
+                avatar: "https://i.pravatar.cc/150?img=5",
+                bestTime: 46.38,
+                totalRace: 18,
+                checkpoint: 11,
+                lastPlayed: "2026-06-19 20:15"
+            },
+            {
+                userId: "1005",
+                username: "FikriBoost",
+                avatar: "https://i.pravatar.cc/150?img=11",
+                bestTime: 48.71,
+                totalRace: 23,
+                checkpoint: 10,
+                lastPlayed: "2026-06-19 14:22"
+            },
+            {
+                userId: "1006",
+                username: "MiraRace",
+                avatar: "https://i.pravatar.cc/150?img=32",
+                bestTime: 50.12,
+                totalRace: 14,
+                checkpoint: 10,
+                lastPlayed: "2026-06-18 16:09"
+            },
+            {
+                userId: "1007",
+                username: "RakaTurbo",
+                avatar: "https://i.pravatar.cc/150?img=15",
+                bestTime: 51.90,
+                totalRace: 9,
+                checkpoint: 9,
+                lastPlayed: "2026-06-18 11:41"
+            }
+        ];
+
+        let originalData = [];
+        let filteredData = [];
+
+        // =========================
+        // FETCH DATA
+        // =========================
+        async function loadLeaderboard(period = "all") {
+            try {
+                let data = [];
+
+                if (USE_DUMMY_DATA) {
+                    data = [...dummyLeaderboard];
+                } else {
+                    const response = await fetch(`${API_BASE}/leaderboard?period=${period}`);
+                    if (!response.ok) throw new Error("Gagal memuat data leaderboard");
+                    data = await response.json();
+                }
+
+                originalData = sortByBestTime(data);
+                filteredData = [...originalData];
+
+                renderTopThree(originalData);
+                renderLeaderboard(originalData);
+                updatePeriodBadge(period);
+            } catch (error) {
+                console.error(error);
+                originalData = [...dummyLeaderboard];
+                filteredData = [...originalData];
+                renderTopThree(originalData);
+                renderLeaderboard(originalData);
+                updatePeriodBadge(period);
+            }
+        }
+
+        function sortByBestTime(data) {
+            return [...data].sort((a, b) => a.bestTime - b.bestTime);
+        }
+
+        // =========================
+        // TOP 3 CARD
+        // =========================
+        function renderTopThree(data) {
+            const container = document.getElementById("topThreeCards");
+            container.innerHTML = "";
+
+            const top3 = data.slice(0, 3);
+            const classes = ["gold", "silver", "bronze"];
+            const labels = ["🥇 Juara 1", "🥈 Juara 2", "🥉 Juara 3"];
+
+            top3.forEach((player, index) => {
+                const col = document.createElement("div");
+                col.className = "col-md-4";
+                col.innerHTML = `
+                    <div class="top-card ${classes[index]}">
+                        <div class="top-rank">${labels[index]}</div>
+                        <img class="avatar" src="${player.avatar}" alt="${player.username}">
+                        <h5>${player.username}</h5>
+                        <p>Best Time: <strong>${player.bestTime}s</strong></p>
+                        <p>Total Race: ${player.totalRace}</p>
+                    </div>
+                `;
+                container.appendChild(col);
+            });
+        }
+
+        // =========================
+        // RENDER TABEL
+        // =========================
+        function renderLeaderboard(data) {
+            const tbody = document.getElementById("leaderboardBody");
+            const emptyState = document.getElementById("emptyState");
+            tbody.innerHTML = "";
+
+            if (!data.length) {
+                emptyState.classList.remove("d-none");
+                return;
+            }
+
+            emptyState.classList.add("d-none");
+
+            data.forEach((player, index) => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td>
+                        <span class="rank-badge">${index + 1}</span>
+                    </td>
+                    <td>
+                        <div class="player-cell">
+                            <img class="avatar-sm" src="${player.avatar}" alt="${player.username}">
+                            <div class="player-meta">
+                                <strong>${player.username}</strong>
+                                <small>User ID: ${player.userId}</small>
+                            </div>
+                        </div>
+                    </td>
+                    <td>${player.bestTime}s</td>
+                    <td>${player.totalRace}</td>
+                    <td>CP ${player.checkpoint}</td>
+                    <td>${player.lastPlayed}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // =========================
+        // SEARCH
+        // =========================
+        function searchPlayer() {
+            const keyword = document.getElementById("searchInput").value.toLowerCase().trim();
+
+            const result = originalData.filter(player =>
+                player.username.toLowerCase().includes(keyword) ||
+                player.userId.toLowerCase().includes(keyword)
+            );
+
+            filteredData = result;
+            renderLeaderboard(filteredData);
+        }
+
+        // =========================
+        // FILTER PERIOD
+        // =========================
+        async function handlePeriodChange() {
+            const period = document.getElementById("periodSelect").value;
+            await loadLeaderboard(period);
+        }
+
+        function updatePeriodBadge(period) {
+            const labelMap = {
+                all: "Semua Waktu",
+                weekly: "Mingguan",
+                daily: "Harian"
+            };
+            document.getElementById("activePeriodText").textContent = `Periode: ${labelMap[period]}`;
+        }
+
+        // =========================
+        // EVENT
+        // =========================
+        document.getElementById("searchInput").addEventListener("input", searchPlayer);
+        document.getElementById("periodSelect").addEventListener("change", handlePeriodChange);
+
+        // Initial load
+        loadLeaderboard();
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
