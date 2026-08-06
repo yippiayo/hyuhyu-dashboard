@@ -1,1099 +1,1412 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Leaderboard - Hyuhyu Dashboard</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        :root{
-            --bg:#0f0f0f;
-            --card:#181818;
-            --card2:#202020;
-            --text:#fff;
-            --muted:#b5b5b5;
-            --line:#303030;
-            --gold:#ffcc4d;
-            --silver:#d6d6d6;
-            --bronze:#d1a274;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        body{
-            margin:0;
-            background:var(--bg);
-            color:var(--text);
-            font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            min-height:100vh;
-        }
+<title>Leaderboard - Hyuhyu Dashboard</title>
 
-        .navbar-custom{
-            background:#111;
-            border-bottom:1px solid rgba(255,255,255,0.06);
-        }
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-        .navbar-brand{
-            font-weight:700;
-        }
 
-        .page-header{
-            padding:50px 20px 20px;
-        }
+<style>
 
-        .page-title{
-            font-size:2.5rem;
-            font-weight:800;
-            margin-bottom:8px;
-        }
+:root{
+    --bg:#0f0f0f;
+    --card:#181818;
+    --text:#ffffff;
+    --muted:#b5b5b5;
+    --gold:#ffcc4d;
+    --silver:#d6d6d6;
+    --bronze:#d1a274;
+}
 
-        .page-subtitle{
-            color:var(--muted);
-            max-width:900px;
-            line-height:1.8;
-        }
 
-        .control-card,
-        .table-card,
-        .top-card{
-            background:var(--card);
-            border:1px solid rgba(255,255,255,0.06);
-            border-radius:18px;
-            padding:22px;
-            box-shadow:0 8px 24px rgba(0,0,0,0.2);
-        }
+body{
 
-        .top-card{
-            text-align:center;
-            height:100%;
-        }
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Segoe UI',sans-serif;
 
-        .top-rank{
-            font-size:2rem;
-            font-weight:800;
-            margin-bottom:10px;
-        }
+}
 
-        .top-card .avatar{
-            width:78px;
-            height:78px;
-            border-radius:50%;
-            object-fit:cover;
-            margin-bottom:12px;
-            border:3px solid rgba(255,255,255,0.1);
-        }
 
-        .top-card h5{
-            font-weight:700;
-            margin-bottom:6px;
-        }
+/* NAVBAR */
 
-        .top-card p{
-            color:var(--muted);
-            margin:0;
-        }
+.navbar-custom{
 
-        .gold{ border-top:4px solid var(--gold); }
-        .silver{ border-top:4px solid var(--silver); }
-        .bronze{ border-top:4px solid var(--bronze); }
+    background:#111;
+    border-bottom:1px solid #262626;
 
-        .search-box input,
-        .filter-box select{
-            background:#111;
-            color:#fff;
-            border:1px solid #333;
-            border-radius:12px;
-            min-height:46px;
-        }
+}
 
-        .search-box input:focus,
-        .filter-box select:focus{
-            background:#151515;
-            color:#fff;
-            box-shadow:none;
-            border-color:#555;
-        }
 
-        .table thead th{
-            border-bottom:1px solid #333 !important;
-            color:#ddd;
-            font-weight:600;
-        }
+.navbar-brand{
 
-        .table tbody tr{
-            border-bottom:1px solid #242424;
-        }
+    font-weight:800;
 
-        .table tbody tr:hover{
-            background:#1d1d1d;
-        }
+}
 
-        .table td, .table th{
-            padding:14px 12px;
-            vertical-align:middle;
-        }
 
-        .rank-badge{
-            font-weight:800;
-            font-size:1rem;
-            display:inline-flex;
-            align-items:center;
-            justify-content:center;
-            width:36px;
-            height:36px;
-            border-radius:50%;
-            background:#252525;
-        }
 
-        .player-cell{
-            display:flex;
-            align-items:center;
-            gap:12px;
-        }
+/* HEADER */
 
-        .avatar-sm{
-            width:46px;
-            height:46px;
-            border-radius:50%;
-            object-fit:cover;
-        }
+.page-header{
 
-        .player-meta small{
-            color:var(--muted);
-            display:block;
-        }
+    padding:40px 20px 20px;
 
-        .footer{
-            text-align:center;
-            color:#9b9b9b;
-            padding:30px 20px;
-            margin-top:40px;
-        }
+}
 
-        .empty-state{
-            color:var(--muted);
-            text-align:center;
-            padding:25px 0;
-        }
 
-        .period-badge{
-            display:inline-block;
-            padding:8px 14px;
-            border-radius:999px;
-            background:#222;
-            color:#ddd;
-            font-size:.9rem;
-        }
-    </style>
+.page-title{
+
+    font-size:2.5rem;
+    font-weight:800;
+
+}
+
+
+.page-subtitle{
+
+    color:var(--muted);
+
+}
+
+
+
+
+/* CARD */
+
+.control-card,
+.table-card,
+.top-card{
+
+
+    background:var(--card);
+    border:1px solid #262626;
+    border-radius:18px;
+    padding:20px;
+
+}
+
+
+
+
+/* STAT CARD */
+
+
+.stat-title{
+
+    color:var(--muted);
+    font-size:.9rem;
+
+}
+
+
+.stat-value{
+
+    font-size:2rem;
+    font-weight:800;
+
+}
+
+
+
+/* TOP PLAYER */
+
+
+.top-card{
+
+    text-align:center;
+
+}
+
+
+
+.top-card img{
+
+    width:80px;
+    height:80px;
+    border-radius:50%;
+
+}
+
+
+
+.top-rank{
+
+    font-size:1.8rem;
+    font-weight:800;
+
+}
+
+
+
+.gold{
+
+    border-top:4px solid var(--gold);
+
+}
+
+
+.silver{
+
+    border-top:4px solid var(--silver);
+
+}
+
+
+.bronze{
+
+    border-top:4px solid var(--bronze);
+
+}
+
+
+
+/* TABLE */
+
+
+.table{
+
+    color:white;
+
+}
+
+
+.table tbody tr:hover{
+
+    background:#222;
+
+}
+
+
+
+.avatar-sm{
+
+    width:45px;
+    height:45px;
+    border-radius:50%;
+
+}
+
+
+
+.player-cell{
+
+    display:flex;
+    align-items:center;
+    gap:12px;
+
+}
+
+
+.player-meta small{
+
+    display:block;
+    color:var(--muted);
+
+}
+
+
+
+.rank-badge{
+
+    width:35px;
+    height:35px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:50%;
+    background:#252525;
+
+    font-weight:bold;
+
+}
+
+
+
+/* SEARCH */
+
+
+.form-control,
+.form-select{
+
+    background:#111;
+    border:1px solid #333;
+    color:white;
+
+}
+
+
+.form-control:focus,
+.form-select:focus{
+
+    background:#111;
+    color:white;
+    box-shadow:none;
+
+}
+
+
+
+/* FOOTER */
+
+
+.footer{
+
+    text-align:center;
+    color:#888;
+    padding:30px;
+
+}
+
+
+.period-badge{
+
+    background:#222;
+    padding:8px 14px;
+    border-radius:20px;
+
+}
+
+
+
+</style>
+
 </head>
+
+
 <body>
 
-    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
-        <div class="container">
-            <a class="navbar-brand" href="index.html">🏁 Hyuhyu Dashboard</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse" id="navMenu">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="index.html">Beranda</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="leaderboard.html">Leaderboard</a></li>
-                    <li class="nav-item"><a class="nav-link" href="players.html">Pemain</a></li>
-                    <li class="nav-item"><a class="nav-link" href="map-checkpoint.html">Checkpoint</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-
-    <section class="page-header">
-        <div class="container mb-4">
-
-    <div class="row g-4">
-
-        <div class="col-md-3">
-            <div class="control-card text-center">
-                <h6>Total Player</h6>
-                <h2 id="totalPlayer">0</h2>
-            </div>
-        </div>
 
 
-        <div class="col-md-3">
-            <div class="control-card text-center">
-                <h6>Total Race</h6>
-                <h2 id="totalRace">0</h2>
-            </div>
-        </div>
+<!-- NAVBAR -->
 
 
-        <div class="col-md-3">
-            <div class="control-card text-center">
-                <h6>Best Time</h6>
-                <h2 id="bestTime">0s</h2>
-            </div>
-        </div>
+<nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
+
+<div class="container">
 
 
-        <div class="col-md-3">
-            <div class="control-card text-center">
-                <h6>Checkpoint</h6>
-                <h2 id="checkpoint">0</h2>
-            </div>
-        </div>
+<a class="navbar-brand" href="index.html">
+🏁 Hyuhyu Dashboard
+</a>
 
-    </div>
+
+<button class="navbar-toggler"
+data-bs-toggle="collapse"
+data-bs-target="#menu">
+
+<span class="navbar-toggler-icon"></span>
+
+</button>
+
+
+
+<div class="collapse navbar-collapse" id="menu">
+
+
+<ul class="navbar-nav ms-auto">
+
+
+<li class="nav-item">
+<a class="nav-link" href="index.html">
+Beranda
+</a>
+</li>
+
+
+<li class="nav-item">
+<a class="nav-link active" href="leaderboard.html">
+Leaderboard
+</a>
+</li>
+
+
+<li class="nav-item">
+<a class="nav-link" href="players.html">
+Pemain
+</a>
+</li>
+
+
+<li class="nav-item">
+<a class="nav-link" href="map-checkpoint.html">
+Checkpoint
+</a>
+</li>
+
+
+</ul>
+
 
 </div>
-        <div class="container">
-            <h1 class="page-title">Leaderboard Pemain</h1>
-            <p class="page-subtitle">
-                Halaman ini menampilkan peringkat pemain HYUHYU berdasarkan waktu tercepat.
-                Data dapat difilter berdasarkan periode dan dicari berdasarkan username pemain.
-            </p>
-        </div>
-    </section>
 
-    <div class="container mb-4">
-        <div class="row g-4" id="topThreeCards">
-            <!-- Top 3 otomatis dirender -->
-        </div>
-    </div>
 
-    <div class="container">
-        <div class="control-card mb-4">
-            <div class="row g-3 align-items-center">
-                <div class="col-md-6 search-box">
-                    <input id="searchInput" type="text" class="form-control" placeholder="Cari pemain..." />
-                </div>
-                <div class="col-md-3 filter-box">
-                    <select id="periodSelect" class="form-select">
-                        <option value="all">Semua Waktu</option>
-                        <option value="weekly">Mingguan</option>
-                        <option value="daily">Harian</option>
-                    </select>
-                </div>
-                <div class="col-md-3 text-md-end">
-                    <span class="period-badge" id="activePeriodText">
+</div>
+
+</nav>
+
+
+
+
+
+<!-- HEADER -->
+
+
+<section class="page-header">
+
+
+<div class="container">
+
+
+<h1 class="page-title">
+Leaderboard Pemain
+</h1>
+
+
+<p class="page-subtitle">
+
+Peringkat pemain HYUHYU berdasarkan waktu tercepat.
+Data diperbarui otomatis dari sistem Roblox melalui REST API.
+
+</p>
+
+
+</div>
+
+
+</section>
+
+
+
+
+
+<!-- STATISTIK -->
+
+
+<div class="container mb-4">
+
+
+<div class="row g-4">
+
+
+
+<div class="col-md-3">
+
+<div class="control-card text-center">
+
+<div class="stat-title">
+Total Player
+</div>
+
+<div class="stat-value" id="totalPlayer">
+0
+</div>
+
+
+</div>
+
+</div>
+
+
+
+
+
+<div class="col-md-3">
+
+<div class="control-card text-center">
+
+
+<div class="stat-title">
+Total Race
+</div>
+
+
+<div class="stat-value" id="totalRace">
+0
+</div>
+
+
+</div>
+
+</div>
+
+
+
+
+
+<div class="col-md-3">
+
+<div class="control-card text-center">
+
+
+<div class="stat-title">
+Best Time
+</div>
+
+
+<div class="stat-value" id="bestTime">
+0s
+</div>
+
+
+</div>
+
+</div>
+
+
+
+
+
+<div class="col-md-3">
+
+<div class="control-card text-center">
+
+
+<div class="stat-title">
+Checkpoint
+</div>
+
+
+<div class="stat-value" id="checkpoint">
+0
+</div>
+
+
+</div>
+
+</div>
+
+
+
+
+</div>
+
+
+</div><!-- TOP 3 -->
+
+<div class="container mb-4">
+
+<div class="row g-4" id="topThreeCards">
+
+</div>
+
+</div>
+
+
+
+
+
+<!-- CONTROL -->
+
+<div class="container">
+
+
+<div class="control-card mb-4">
+
+
+<div class="row g-3 align-items-center">
+
+
+<div class="col-md-6">
+
+<input 
+id="searchInput"
+class="form-control"
+placeholder="Cari pemain..."
+>
+
+
+</div>
+
+
+
+<div class="col-md-3">
+
+
+<select 
+id="periodSelect"
+class="form-select">
+
+
+<option value="all">
+Semua Waktu
+</option>
+
+
+<option value="weekly">
+Mingguan
+</option>
+
+
+<option value="daily">
+Harian
+</option>
+
+
+</select>
+
+
+</div>
+
+
+
+<div class="col-md-3 text-md-end">
+
+
+<span class="period-badge" id="activePeriodText">
+
 Periode: Semua Waktu
+
 </span>
+
 
 <span class="period-badge ms-2" id="updateStatus">
+
 🟢 Live
+
 </span>
-                </div>
-            </div>
-        </div>
 
-        <div class="table-card">
-            <div class="table-responsive">
-                <table class="table table-dark table-borderless align-middle mb-0">
-                    <thead>
-                        <tr>
-                            <th style="width:80px;">#</th>
-                            <th>Pemain</th>
-                            <th>Waktu Tercepat</th>
-                            <th>Total Race</th>
-                            <th>Checkpoint</th>
-                            <th>Terakhir Main</th>
-                        </tr>
-                    </thead>
-                    <tbody id="leaderboardBody"></tbody>
-                </table>
-            </div>
-            <div id="emptyState" class="empty-state d-none">Data pemain tidak ditemukan.</div>
-        </div>
-    </div>
 
-    <!-- PLAYER DETAIL MODAL -->
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+<!-- TABLE -->
+
+
+<div class="table-card">
+
+
+<div class="table-responsive">
+
+
+<table class="table table-dark table-borderless">
+
+
+<thead>
+
+
+<tr>
+
+<th>#</th>
+
+<th>Pemain</th>
+
+<th>Best Time</th>
+
+<th>Total Race</th>
+
+<th>Checkpoint</th>
+
+<th>Terakhir Main</th>
+
+
+</tr>
+
+
+</thead>
+
+
+<tbody id="leaderboardBody">
+
+
+</tbody>
+
+
+</table>
+
+
+</div>
+
+
+
+<div id="emptyState" class="text-center text-secondary d-none">
+
+Data pemain tidak ditemukan
+
+</div>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+<!-- DETAIL PLAYER MODAL -->
+
 
 <div class="modal fade" id="playerModal">
 
+
 <div class="modal-dialog">
+
 
 <div class="modal-content bg-dark text-white">
 
 
+
 <div class="modal-header">
 
+
 <h5 class="modal-title">
+
 Detail Player
+
 </h5>
 
 
 <button 
 class="btn-close btn-close-white"
 data-bs-dismiss="modal">
+
 </button>
 
+
 </div>
+
 
 
 
 <div class="modal-body">
 
 
-<h4 id="detailUsername">
+<h3 id="detailUsername">
+
 -
-</h4>
+
+</h3>
+
+
+<hr>
 
 
 <p>
-User ID:
-<span id="detailId">-</span>
+🎮 User ID:
+<b id="detailId">-</b>
 </p>
 
 
 <p>
 ⚡ Best Time:
-<span id="detailTime">-</span>
+<b id="detailTime">-</b>
 </p>
 
 
 <p>
 🏁 Total Race:
-<span id="detailRace">-</span>
+<b id="detailRace">-</b>
 </p>
 
 
 <p>
 📍 Checkpoint:
-<span id="detailCheckpoint">-</span>
+<b id="detailCheckpoint">-</b>
 </p>
 
 
 <p>
 🕒 Last Played:
-<span id="detailDate">-</span>
+<b id="detailDate">-</b>
 </p>
 
 
 </div>
 
 
-</div>
 
 </div>
 
+
 </div>
-    <footer class="footer">
-        <p class="mb-1">© 2026 Hyuhyu Race Monitoring System</p>
-        <small>Leaderboard Roblox HYUHYU</small>
-    </footer>
 
-    <script>
 
-    // =========================
-    // KONFIGURASI API
-    // =========================
+</div>
 
-    const API_BASE = "https://leaderboard-api-production-64a5.up.railway.app/api";
 
 
-    let originalData = [];
-    let filteredData = [];
 
 
 
-    // =========================
-    // LOAD DATA LEADERBOARD
-    // =========================
 
-    async function loadLeaderboard(period = "all") {
+<footer class="footer">
 
-        try {
 
+© 2026 Hyuhyu Race Monitoring System
 
-            const response = await fetch(
-                `${API_BASE}/leaderboard`
-            );
 
+</footer>
 
-            if (!response.ok) {
 
-                throw new Error(
-                    "API tidak merespon"
-                );
 
-            }
 
 
 
-            const apiData = await response.json();
 
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-            const data = apiData.map(player => ({
 
+<script>
 
-                userId: player.playerId,
 
+const API_BASE = 
+"https://leaderboard-api-production-64a5.up.railway.app/api";
 
-                username: player.username,
 
 
-                avatar:
-                "https://www.roblox.com/headshot-thumbnail/image?userId="
-                + player.playerId
-                + "&width=150&height=150&format=png",
+let originalData = [];
 
 
 
-                bestTime: player.bestTime,
 
 
-                totalRace: player.totalRace,
+// LOAD LEADERBOARD
 
 
-                checkpoint: player.checkpoint,
+async function loadLeaderboard(){
 
 
-                lastPlayed:
-                new Date(player.updatedAt)
-                .toLocaleString("id-ID")
+try{
 
 
-            }));
+const response =
+await fetch(
+`${API_BASE}/leaderboard`
+);
 
 
 
+const apiData =
+await response.json();
 
-            originalData =
-            sortByBestTime(data);
 
 
 
-            filteredData =
-            [...originalData];
+originalData =
+apiData.map(player=>({
 
 
+userId:player.playerId,
 
-            renderTopThree(
-                originalData
-            );
 
+username:player.username,
 
-            renderLeaderboard(
-                originalData
-            );
 
+avatar:
+"https://www.roblox.com/headshot-thumbnail/image?userId="
++
+player.playerId
++
+"&width=150&height=150&format=png",
 
-            updatePeriodBadge(
-                period
-            );
 
+bestTime:player.bestTime,
 
-            updateStatus();
 
+totalRace:player.totalRace,
 
 
-        } catch(error) {
+checkpoint:player.checkpoint,
 
 
-            console.error(
-                "Leaderboard error:",
-                error
-            );
+lastPlayed:
+new Date(player.updatedAt)
+.toLocaleString("id-ID")
 
 
-            document.getElementById(
-                "emptyState"
-            )
-            .classList
-            .remove("d-none");
+}));
 
 
-        }
 
+originalData.sort(
+(a,b)=>a.bestTime-b.bestTime
+);
 
-    }
 
 
+renderTopThree(originalData);
 
 
-    // =========================
-    // SORT BEST TIME
-    // =========================
+renderLeaderboard(originalData);
 
-    function sortByBestTime(data){
 
-        return [...data].sort(
-            (a,b)=>
-            a.bestTime - b.bestTime
-        );
 
-    }
+document.getElementById(
+"updateStatus"
+).innerHTML="🟢 Live Update";
 
 
 
+}
+catch(error){
 
-    // =========================
-    // TOP 3 CARD
-    // =========================
 
-    function renderTopThree(data){
+console.error(
+"Leaderboard error",
+error
+);
 
 
-        const container =
-        document.getElementById(
-            "topThreeCards"
-        );
+}
 
 
-        container.innerHTML="";
 
+}
 
 
-        const top3 =
-        data.slice(0,3);
 
 
 
-        const classes =
-        [
-            "gold",
-            "silver",
-            "bronze"
-        ];
 
 
 
-        const labels =
-        [
-            "🥇 Juara 1",
-            "🥈 Juara 2",
-            "🥉 Juara 3"
-        ];
+// TOP 3
 
 
+function renderTopThree(data){
 
-        top3.forEach(
-            (player,index)=>{
 
+const container =
+document.getElementById(
+"topThreeCards"
+);
 
-                const col =
-                document.createElement(
-                    "div"
-                );
 
+container.innerHTML="";
 
-                col.className =
-                "col-md-4";
 
 
+const style =
+[
+"gold",
+"silver",
+"bronze"
+];
 
-                col.innerHTML = `
 
-                <div class="top-card ${classes[index]}">
 
-                    <div class="top-rank">
-                    ${labels[index]}
-                    </div>
+const rank =
+[
+"🥇 Juara 1",
+"🥈 Juara 2",
+"🥉 Juara 3"
+];
 
 
-                    <img 
-                    class="avatar"
-                    src="${player.avatar}"
-                    >
 
+data.slice(0,3)
+.forEach((player,index)=>{
 
-                    <h5>
-                    ${player.username}
-                    </h5>
 
+container.innerHTML += `
 
-                    <p>
-                    Best Time:
-                    <strong>
-                    ${player.bestTime}s
-                    </strong>
-                    </p>
 
+<div class="col-md-4">
 
-                    <p>
-                    Total Race:
-                    ${player.totalRace}
-                    </p>
 
+<div class="top-card ${style[index]}">
 
-                </div>
 
-                `;
+<div class="top-rank">
 
+${rank[index]}
 
-                container.appendChild(col);
+</div>
 
 
-            }
-        );
 
+<img src="${player.avatar}">
 
-    }
 
 
+<h5>
 
+${player.username}
 
-    // =========================
-    // TABLE
-    // =========================
+</h5>
 
-    function renderLeaderboard(data){
 
 
-        const tbody =
-        document.getElementById(
-            "leaderboardBody"
-        );
+<p>
 
+Best Time:
+<b>${player.bestTime}s</b>
 
-        const emptyState =
-        document.getElementById(
-            "emptyState"
-        );
+</p>
 
 
 
-        tbody.innerHTML="";
+</div>
 
 
+</div>
 
-        if(data.length===0){
 
 
-            emptyState
-            .classList
-            .remove("d-none");
+`;
 
 
-            return;
+});
 
-        }
 
+}
 
 
-        emptyState
-        .classList
-        .add("d-none");
 
 
 
 
-        data.forEach(
-            (player,index)=>{
 
 
-                const tr =
-                document.createElement(
-                    "tr"
-                );
 
+// TABLE
 
 
-                tr.innerHTML = `
+function renderLeaderboard(data){
 
 
-                <td>
+const tbody =
+document.getElementById(
+"leaderboardBody"
+);
 
-                <span class="rank-badge">
 
-                ${index+1}
 
-                </span>
+tbody.innerHTML="";
 
-                </td>
 
 
+if(data.length===0){
 
-                <td>
+document.getElementById(
+"emptyState"
+)
+.classList.remove("d-none");
 
-                <div class="player-cell">
 
+return;
 
-                <img
-                class="avatar-sm"
-                src="${player.avatar}"
-                >
+}
 
 
-                <div class="player-meta">
 
-                <strong 
+document.getElementById(
+"emptyState"
+)
+.classList.add("d-none");
+
+
+
+
+
+data.forEach((player,index)=>{
+
+
+tbody.innerHTML += `
+
+
+<tr>
+
+
+<td>
+
+<span class="rank-badge">
+
+${index+1}
+
+</span>
+
+</td>
+
+
+
+
+<td>
+
+
+<div class="player-cell">
+
+
+<img 
+class="avatar-sm"
+src="${player.avatar}"
+>
+
+
+
+<div class="player-meta">
+
+
+<strong 
 style="cursor:pointer"
 onclick="showPlayerDetail('${player.userId}')">
 
+
 ${player.username}
+
 
 </strong>
 
 
-                <small>
-                User ID:
-                ${player.userId}
-                </small>
 
+<small>
 
-                </div>
+ID:
+${player.userId}
 
+</small>
 
-                </div>
 
 
-                </td>
+</div>
 
 
+</div>
 
-                <td>
-                ${player.bestTime}s
-                </td>
 
 
+</td>
 
-                <td>
-                ${player.totalRace}
-                </td>
 
 
 
-                <td>
-                CP ${player.checkpoint}
-                </td>
+<td>
 
+${player.bestTime}s
 
+</td>
 
-                <td>
-                ${player.lastPlayed}
-                </td>
 
 
-                `;
+<td>
 
+${player.totalRace}
 
+</td>
 
-                tbody.appendChild(tr);
 
 
-            }
-        );
+<td>
 
+CP ${player.checkpoint}
 
-    }
+</td>
 
 
 
+<td>
 
+${player.lastPlayed}
 
-    // =========================
-    // SEARCH
-    // =========================
+</td>
 
-    function searchPlayer(){
 
 
-        const keyword =
-        document
-        .getElementById(
-            "searchInput"
-        )
-        .value
-        .toLowerCase()
-        .trim();
+</tr>
 
 
+`;
 
-        const result =
-        originalData.filter(
-            player =>
 
-            player.username
-            .toLowerCase()
-            .includes(keyword)
 
-            ||
+});
 
-            player.userId
-            .toLowerCase()
-            .includes(keyword)
 
-        );
-
-
-
-        filteredData=result;
-
-
-        renderLeaderboard(
-            filteredData
-        );
-
-
-    }
-
-
-
-
-
-    // =========================
-    // PERIOD
-    // =========================
-
-    async function handlePeriodChange(){
-
-
-        const period =
-        document
-        .getElementById(
-            "periodSelect"
-        )
-        .value;
-
-
-
-        await loadLeaderboard(
-            period
-        );
-
-
-    }
-
-
-
-
-    function updatePeriodBadge(period){
-
-
-        const label = {
-
-
-            all:"Semua Waktu",
-
-            weekly:"Mingguan",
-
-            daily:"Harian"
-
-
-        };
-
-
-
-        document.getElementById(
-            "activePeriodText"
-        )
-        .textContent =
-        "Periode: "
-        + label[period];
-
-
-    }
-
-
-
-
-    async function showPlayerDetail(id){
-
-
-    try{
-
-
-        const response =
-        await fetch(
-        `${API_BASE}/leaderboard/player/${id}`
-        );
-
-
-        const player =
-        await response.json();
-
-
-
-        document.getElementById(
-            "detailUsername"
-        ).innerHTML =
-        player.username;
-
-
-
-        document.getElementById(
-            "detailId"
-        ).innerHTML =
-        player.playerId;
-
-
-
-        document.getElementById(
-            "detailTime"
-        ).innerHTML =
-        player.bestTime+"s";
-
-
-
-        document.getElementById(
-            "detailRace"
-        ).innerHTML =
-        player.totalRace;
-
-
-
-        document.getElementById(
-            "detailCheckpoint"
-        ).innerHTML =
-        player.checkpoint;
-
-
-
-        document.getElementById(
-            "detailDate"
-        ).innerHTML =
-        new Date(player.updatedAt)
-        .toLocaleString("id-ID");
-
-
-
-        const modal =
-        new bootstrap.Modal(
-            document.getElementById(
-                "playerModal"
-            )
-        );
-
-
-        modal.show();
-
-
-
-    }catch(error){
-
-        console.error(error);
-
-    }
-
-}
-
-    // =========================
-    // STATUS LIVE
-    // =========================
-
-    function updateStatus(){
-
-
-        const status =
-        document.getElementById(
-            "updateStatus"
-        );
-
-
-        if(status){
-
-            status.innerHTML =
-            "🟢 Live Update";
-
-        }
-
-
-    }
-    async function loadStats(){
-
-    try{
-
-        const response = await fetch(
-            `${API_BASE}/leaderboard/stats`
-        );
-
-
-        const data =
-        await response.json();
-
-
-
-        document.getElementById(
-            "totalPlayer"
-        ).innerHTML =
-        data.totalPlayer;
-
-
-
-        document.getElementById(
-            "totalRace"
-        ).innerHTML =
-        data.totalRace;
-
-
-
-        document.getElementById(
-            "bestTime"
-        ).innerHTML =
-        data.bestTime + "s";
-
-
-
-        document.getElementById(
-            "checkpoint"
-        ).innerHTML =
-        data.checkpoint;
-
-
-
-    }catch(error){
-
-        console.error(
-            "Stats error:",
-            error
-        );
-
-    }
 
 }
 
 
 
 
-    // =========================
-    // EVENT
-    // =========================
-
-    document
-    .getElementById(
-        "searchInput"
-    )
-    .addEventListener(
-        "input",
-        searchPlayer
-    );
-
-
-
-    document
-    .getElementById(
-        "periodSelect"
-    )
-    .addEventListener(
-        "change",
-        handlePeriodChange
-    );
 
 
 
 
 
-    // =========================
-    // START
-    // =========================
-
-    loadLeaderboard();
-    loadStats();
+// DETAIL PLAYER
 
 
+async function showPlayerDetail(id){
 
 
-    // AUTO REFRESH 10 DETIK
+try{
 
-    setInterval(()=>{
 
-    loadLeaderboard();
+const response =
+await fetch(
+`${API_BASE}/leaderboard/player/${id}`
+);
 
-    loadStats();
+
+
+const player =
+await response.json();
+
+
+
+
+document.getElementById(
+"detailUsername"
+).innerHTML =
+player.username;
+
+
+
+document.getElementById(
+"detailId"
+).innerHTML =
+player.playerId;
+
+
+
+document.getElementById(
+"detailTime"
+).innerHTML =
+player.bestTime+"s";
+
+
+
+document.getElementById(
+"detailRace"
+).innerHTML =
+player.totalRace;
+
+
+
+document.getElementById(
+"detailCheckpoint"
+).innerHTML =
+player.checkpoint;
+
+
+
+document.getElementById(
+"detailDate"
+).innerHTML =
+new Date(
+player.updatedAt
+)
+.toLocaleString("id-ID");
+
+
+
+
+
+new bootstrap.Modal(
+document.getElementById(
+"playerModal"
+)
+)
+.show();
+
+
+
+}
+catch(error){
+
+console.error(error);
+
+}
+
+
+
+}
+
+
+
+
+
+
+
+
+// SEARCH
+
+
+document
+.getElementById(
+"searchInput"
+)
+.addEventListener(
+"input",
+function(){
+
+
+const keyword =
+this.value
+.toLowerCase();
+
+
+
+const result =
+originalData.filter(
+player=>
+
+player.username
+.toLowerCase()
+.includes(keyword)
+
+);
+
+
+
+renderLeaderboard(result);
+
+
+
+});
+
+
+
+
+
+
+
+
+
+// STATISTICS
+
+
+async function loadStats(){
+
+
+try{
+
+
+const response =
+await fetch(
+`${API_BASE}/leaderboard/stats`
+);
+
+
+
+const data =
+await response.json();
+
+
+
+
+document.getElementById(
+"totalPlayer"
+).innerHTML =
+data.totalPlayer;
+
+
+
+document.getElementById(
+"totalRace"
+).innerHTML =
+data.totalRace;
+
+
+
+document.getElementById(
+"bestTime"
+).innerHTML =
+data.bestTime+"s";
+
+
+
+document.getElementById(
+"checkpoint"
+).innerHTML =
+data.checkpoint;
+
+
+
+}
+catch(error){
+
+console.error(error);
+
+}
+
+
+}
+
+
+
+
+
+
+
+
+
+// PERIOD BADGE
+
+
+document
+.getElementById(
+"periodSelect"
+)
+.addEventListener(
+"change",
+function(){
+
+
+document.getElementById(
+"activePeriodText"
+)
+.innerHTML =
+"Periode: "
++
+this.options[this.selectedIndex]
+.text;
+
+
+});
+
+
+
+
+
+
+
+// START
+
+
+loadLeaderboard();
+
+loadStats();
+
+
+
+
+// AUTO REFRESH
+
+
+setInterval(()=>{
+
+
+loadLeaderboard();
+
+loadStats();
+
 
 },10000);
 
 
 
 </script>
+
+
 </body>
 </html>
