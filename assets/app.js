@@ -1,0 +1,149 @@
+const HYUHYU = (() => {
+  const API_BASE = 'https://leaderboard-api-production-64a5.up.railway.app/api';
+  let cachedPlayers = [];
+  let cachedStats = null;
+
+  const escapeHTML = (value = '') => String(value).replace(/[&<>'"]/g, char => ({
+    '&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'
+  }[char]));
+
+  const avatarUrl = (playerId) =>
+    `https://www.roblox.com/headshot-thumbnail/image?userId=${encodeURIComponent(playerId)}&width=150&height=150&format=png`;
+
+  const formatTime = (seconds) => {
+    const n = Number(seconds);
+    if (!Number.isFinite(n)) return '—';
+    const mins = Math.floor(n / 60);
+    const secs = n - mins * 60;
+    return `${String(mins).padStart(2,'0')}:${secs.toFixed(2).padStart(5,'0')}`;
+  };
+
+  const formatDate = (value) => {
+    if (!value) return '—';
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return '—';
+    return new Intl.DateTimeFormat('id-ID', {
+      day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit'
+    }).format(date);
+  };
+
+  const request = async (path, options = {}) => {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 9000);
+    try {
+      const response = await fetch(`${API_BASE}${path}`, {
+        ...options,
+        signal: controller.signal,
+        headers: { 'Accept':'application/json', ...(options.headers || {}) }
+      });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      return await response.json();
+    } finally {
+      clearTimeout(timeout);
+    }
+  };
+
+  const normalizePlayer = (player) => ({
+    playerId: String(player.playerId ?? player.userId ?? ''),
+    username: player.username || 'Unknown Player',
+    bestTime: Number(player.bestTime),
+    totalRace: Number(player.totalRace ?? 0),
+    checkpoint: Number(player.checkpoint ?? 0),
+    updatedAt: player.updatedAt || player.lastPlayed || null
+  });
+
+  const getPlayers = async (force = false) => {
+    if (cachedPlayers.length && !force) return cachedPlayers;
+    const data = await request('/leaderboard');
+    cachedPlayers = (Array.isArray(data) ? data : [])
+      .map(normalizePlayer)
+      .filter(p => Number.isFinite(p.bestTime))
+      .sort((a,b) => a.bestTime - b.bestTime);
+    return cachedPlayers;
+  };
+
+  const getStats = async (force = false) => {
+    if (cachedStats && !force) return cachedStats;
+    try {
+      cachedStats = await request('/leaderboard/stats');
+      return cachedStats;
+    } catch (error) {
+      const players = await getPlayers(force);
+      cachedStats = {
+        totalPlayer: players.length,
+        totalRace: players.reduce((sum,p) => sum + (p.totalRace || 0), 0),
+        bestTime: players[0]?.bestTime ?? null,
+        checkpoint: 2
+      };
+      return cachedStats;
+    }
+  };
+
+  const getPlayer = async (id) => {
+    try {
+      return normalizePlayer(await request(`/leaderboard/player/${encodeURIComponent(id)}`));
+    } catch (error) {
+      const players = await getPlayers();
+      const found = players.find(p => p.playerId === String(id));
+      if (!found) throw error;
+      return found;
+    }
+  };
+
+  const setStatus = (isOnline) => {
+    document.querySelectorAll('[data-api-status]').forEach(el => {
+      el.classList.toggle('online', isOnline);
+      el.classList.toggle('offline', !isOnline);
+      const label = el.querySelector('[data-status-label]');
+      if (label) label.textContent = isOnline ? 'API ONLINE' : 'API OFFLINE';
+    });
+  };
+
+  const ping = async () => {
+    try {
+      await getPlayers(true);
+      setStatus(true);
+      return true;
+    } catch (error) {
+      console.warn('HYUHYU API unavailable:', error);
+      setStatus(false);
+      return false;
+    }
+  };
+
+  const activeNav = () => {
+    const current = location.pathname.split('/').pop() || 'index.html';
+    document.querySelectorAll('[data-nav]').forEach(link => {
+      link.classList.toggle('active', link.getAttribute('href') === current);
+    });
+  };
+
+  const renderFooterYear = () => {
+    document.querySelectorAll('[data-year]').forEach(el => el.textContent = new Date().getFullYear());
+  };
+
+  const animateNumber = (el, value) => {
+    const target = Number(value);
+    if (!Number.isFinite(target)) { el.textContent = '—'; return; }
+    const duration = 650;
+    const start = performance.now();
+    const from = 0;
+    const step = now => {
+      const progress = Math.min((now - start)/duration,1);
+      const eased = 1 - Math.pow(1-progress,3);
+      el.textContent = Math.round(from + (target-from)*eased).toLocaleString('id-ID');
+      if (progress < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  };
+
+  document.addEventListener('DOMContentLoaded', () => {
+    activeNav();
+    renderFooterYear();
+  });
+
+  return {
+    API_BASE, avatarUrl, formatTime, formatDate, escapeHTML, getPlayers, getStats, getPlayer,
+    setStatus, ping, animateNumber
+  };
+})();
