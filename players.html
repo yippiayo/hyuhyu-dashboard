@@ -1,115 +1,1948 @@
 <!doctype html>
 <html lang="id">
+
 <head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#080a0f">
+
+  <meta charset="utf-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width,initial-scale=1"
+  >
+
+  <meta
+    name="theme-color"
+    content="#080a0f"
+  >
+
   <title>Racers • HYUHYU Race Hub</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"><link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet"><link href="assets/styles.css" rel="stylesheet">
 
-<style>
-  .player-avatar-wrap{position:relative;flex:0 0 auto}
-  .player-avatar-wrap::after{content:"";position:absolute;inset:-4px;border-radius:22px;border:1px solid rgba(246,196,69,.18);pointer-events:none}
-  .player-avatar[data-avatar-loading="true"]{filter:saturate(.65) brightness(.78)}
-  .profile-hero{display:grid;grid-template-columns:180px 1fr;gap:22px;align-items:center;margin-bottom:24px}
-  .profile-avatar-panel{height:220px;border:1px solid rgba(246,196,69,.18);border-radius:20px;background:radial-gradient(circle at 50% 28%,rgba(246,196,69,.11),transparent 44%),#0b1018;display:flex;align-items:flex-end;justify-content:center;overflow:hidden;position:relative}
-  .profile-avatar-panel::after{content:"ROBLOX AVATAR";position:absolute;left:12px;bottom:10px;padding:5px 8px;border-radius:999px;background:rgba(8,10,15,.78);border:1px solid rgba(255,255,255,.08);color:#f6c445;font:800 .62rem 'Space Grotesk';letter-spacing:.08em}
-  .profile-avatar{width:100%;height:100%;object-fit:contain;object-position:center bottom;padding:8px 8px 0}
-  .profile-name{font:700 1.6rem 'Space Grotesk';margin-bottom:5px}
-  .profile-id{color:#7c899b;font-size:.78rem}
-  .profile-note{margin-top:12px;color:#98a3b2;font-size:.78rem;line-height:1.6}
-  @media (max-width:575.98px){.profile-hero{grid-template-columns:1fr}.profile-avatar-panel{height:230px}.profile-copy{text-align:center}}
-</style>
+
+  <!-- Bootstrap -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  >
+
+
+  <!-- Bootstrap Icons -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    rel="stylesheet"
+  >
+
+
+  <!-- HYUHYU Styles -->
+  <link
+    href="assets/styles.css"
+    rel="stylesheet"
+  >
+
+
+  <style>
+
+    /* =========================================
+       PLAYER AVATAR
+    ========================================= */
+
+    .player-avatar-wrap {
+      position: relative;
+      flex: 0 0 auto;
+    }
+
+
+    .player-avatar-wrap::after {
+
+      content: "";
+
+      position: absolute;
+
+      inset: -4px;
+
+      border-radius: 22px;
+
+      border:
+        1px solid
+        rgba(246, 196, 69, .18);
+
+      pointer-events: none;
+
+    }
+
+
+    .player-avatar {
+
+      object-fit: cover;
+
+      background:
+        #0b1018;
+
+    }
+
+
+    /* =========================================
+       PROFILE MODAL
+    ========================================= */
+
+    .profile-hero {
+
+      display: grid;
+
+      grid-template-columns:
+        180px 1fr;
+
+      gap: 22px;
+
+      align-items: center;
+
+      margin-bottom: 24px;
+
+    }
+
+
+    .profile-avatar-panel {
+
+      height: 220px;
+
+      border:
+        1px solid
+        rgba(246, 196, 69, .18);
+
+      border-radius: 20px;
+
+      background:
+
+        radial-gradient(
+          circle at 50% 28%,
+          rgba(246, 196, 69, .11),
+          transparent 44%
+        ),
+
+        #0b1018;
+
+      display: flex;
+
+      align-items: flex-end;
+
+      justify-content: center;
+
+      overflow: hidden;
+
+      position: relative;
+
+    }
+
+
+    .profile-avatar-panel::after {
+
+      content:
+        "ROBLOX AVATAR";
+
+      position: absolute;
+
+      left: 12px;
+
+      bottom: 10px;
+
+      padding:
+        5px 8px;
+
+      border-radius:
+        999px;
+
+      background:
+        rgba(8, 10, 15, .78);
+
+      border:
+        1px solid
+        rgba(255, 255, 255, .08);
+
+      color:
+        #f6c445;
+
+      font:
+        800 .62rem
+        'Space Grotesk';
+
+      letter-spacing:
+        .08em;
+
+    }
+
+
+    .profile-avatar {
+
+      width: 100%;
+
+      height: 100%;
+
+      object-fit: contain;
+
+      object-position:
+        center bottom;
+
+      padding:
+        8px 8px 0;
+
+    }
+
+
+    .profile-name {
+
+      font:
+        700 1.6rem
+        'Space Grotesk';
+
+      margin-bottom:
+        5px;
+
+    }
+
+
+    .profile-id {
+
+      color:
+        #7c899b;
+
+      font-size:
+        .78rem;
+
+    }
+
+
+    .profile-note {
+
+      margin-top:
+        12px;
+
+      color:
+        #98a3b2;
+
+      font-size:
+        .78rem;
+
+      line-height:
+        1.6;
+
+    }
+
+
+    @media
+    (max-width: 575.98px) {
+
+      .profile-hero {
+
+        grid-template-columns:
+          1fr;
+
+      }
+
+
+      .profile-avatar-panel {
+
+        height:
+          230px;
+
+      }
+
+
+      .profile-copy {
+
+        text-align:
+          center;
+
+      }
+
+    }
+
+  </style>
+
 </head>
+
+
+
 <body>
-<nav class="site-nav navbar navbar-expand-lg navbar-dark"><div class="container"><a class="navbar-brand" href="index.html"><span class="brand-mark"><i class="bi bi-flag-fill"></i></span><span class="brand-copy"><span class="brand-title">HYUHYU</span><span class="brand-sub">Race Hub</span></span></a><button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"><span class="navbar-toggler-icon"></span></button><div class="collapse navbar-collapse" id="mainNav"><ul class="navbar-nav ms-auto me-lg-3 gap-lg-1"><li class="nav-item"><a data-nav class="nav-link" href="index.html">Beranda</a></li><li class="nav-item"><a data-nav class="nav-link" href="leaderboard.html">Leaderboard</a></li><li class="nav-item"><a data-nav class="nav-link" href="players.html">Pemain</a></li><li class="nav-item"><a data-nav class="nav-link" href="map-checkpoint.html">Checkpoint</a></li></ul><div class="status-pill" data-api-status><span class="status-dot"></span><span data-status-label>CHECKING API</span></div></div></div></nav>
-<header class="page-hero"><div class="container"><span class="eyebrow"><i class="bi bi-person-vcard-fill"></i> Racer Database</span><h1 class="page-title">Pemain</h1><p class="page-lead">Direktori racer HYUHYU yang mengambil data langsung dari MongoDB melalui REST API. Cari pemain dan lihat performa race mereka secara ringkas.</p></div></header>
-<section class="section pt-3"><div class="container"><div class="panel mb-4"><div class="row g-3 align-items-center"><div class="col-lg-7"><div class="position-relative"><i class="bi bi-search position-absolute top-50 translate-middle-y ms-3 text-secondary"></i><input id="playerSearch" class="form-control ps-5" placeholder="Cari racer berdasarkan username atau ID..."></div></div><div class="col-lg-3"><select id="playerSort" class="form-select"><option value="rank">Best Time</option><option value="race">Total Race</option><option value="name">Username A–Z</option></select></div><div class="col-lg-2"><div class="status-pill online justify-content-center w-100"><span class="status-dot"></span><span id="playerCount">0 RACERS</span></div></div></div></div><div id="playerGrid" class="player-grid"><div class="empty-state"><div class="spinner-border spinner-border-sm text-warning me-2"></div>Memuat racer...</div></div><div id="playerEmpty" class="empty-state d-none"><div class="empty-icon"><i class="bi bi-person-x"></i></div>Racer tidak ditemukan.</div></div></section>
-<div class="modal fade" id="playerModal" tabindex="-1"><div class="modal-dialog modal-dialog-centered"><div class="modal-content"><div class="modal-header"><div><div class="section-kicker mb-1">Racer profile</div><h5 class="modal-title">Performance Snapshot</h5></div><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="profile-hero"><div class="profile-avatar-panel"><img id="mAvatar" class="profile-avatar" alt="Avatar Roblox pemain"></div><div class="profile-copy"><h4 id="mName" class="profile-name">—</h4><div class="profile-id">PLAYER ID <span id="mId">—</span></div><div class="profile-note"><i class="bi bi-person-bounding-box me-1 text-warning"></i>Avatar ditampilkan berdasarkan Roblox User ID pemain.</div></div></div><div class="player-card-stats"><div class="mini-stat"><div class="mini-stat-label">Best Time</div><div id="mTime" class="mini-stat-value">—</div></div><div class="mini-stat"><div class="mini-stat-label">Total Race</div><div id="mRace" class="mini-stat-value">—</div></div><div class="mini-stat"><div class="mini-stat-label">Checkpoint</div><div id="mCp" class="mini-stat-value">—</div></div><div class="mini-stat"><div class="mini-stat-label">Last Sync</div><div id="mDate" class="mini-stat-value" style="font-size:.75rem">—</div></div></div></div></div></div></div>
-<footer><div class="container"><div class="footer-row"><div><div class="footer-brand">HYUHYU RACE HUB</div><div>Player data from centralized leaderboard storage</div></div><div>© <span data-year></span> HYUHYU Research Project</div></div></div></footer>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script><script src="assets/app.js"></script><script>
-let allPlayers=[];
-const bustAvatarCache=new Map();
-const fullAvatarCache=new Map();
 
-function fallbackAvatarUrl(playerId){
-  return HYUHYU.avatarUrl(playerId);
-}
 
-async function requestRobloxAvatar(playerId,type='avatar-bust',size='420x420'){
-  const id=String(playerId);
-  const cache=type==='avatar'?fullAvatarCache:bustAvatarCache;
-  if(cache.has(id)) return cache.get(id);
+  <!-- =========================================
+       NAVBAR
+  ========================================== -->
 
-  const url=`https://thumbnails.roblox.com/v1/users/${type}?userIds=${encodeURIComponent(id)}&size=${encodeURIComponent(size)}&format=Png&isCircular=false`;
-  try{
-    const response=await fetch(url,{headers:{Accept:'application/json'}});
-    if(!response.ok) throw new Error(`Roblox thumbnail HTTP ${response.status}`);
-    const payload=await response.json();
-    const item=Array.isArray(payload.data)?payload.data[0]:null;
-    const imageUrl=item?.imageUrl||fallbackAvatarUrl(id);
-    cache.set(id,imageUrl);
-    return imageUrl;
-  }catch(error){
-    console.warn('Roblox avatar fallback:',error);
-    const fallback=fallbackAvatarUrl(id);
-    cache.set(id,fallback);
-    return fallback;
-  }
-}
+  <nav
+    class="
+      site-nav
+      navbar
+      navbar-expand-lg
+      navbar-dark
+    "
+  >
 
-async function hydratePlayerAvatars(){
-  const images=[...document.querySelectorAll('[data-player-avatar]')];
-  await Promise.all(images.map(async img=>{
-    const id=img.dataset.playerAvatar;
-    img.dataset.avatarLoading='true';
-    img.src=fallbackAvatarUrl(id);
-    const url=await requestRobloxAvatar(id,'avatar-bust','420x420');
-    if(img.isConnected&&img.dataset.playerAvatar===id) img.src=url;
-    img.dataset.avatarLoading='false';
-  }));
-}
+    <div class="container">
 
-function renderPlayers(){
-  const q=document.getElementById('playerSearch').value.trim().toLowerCase();
-  const mode=document.getElementById('playerSort').value;
-  let rows=allPlayers.filter(p=>p.username.toLowerCase().includes(q)||p.playerId.toLowerCase().includes(q));
-  rows.sort((a,b)=>mode==='race'?b.totalRace-a.totalRace:mode==='name'?a.username.localeCompare(b.username):a.bestTime-b.bestTime);
-  const grid=document.getElementById('playerGrid');
-  grid.innerHTML=rows.map((p,i)=>`<article class="player-card" onclick="openPlayer('${HYUHYU.escapeHTML(p.playerId)}')" role="button" tabindex="0"><div class="player-card-head"><div class="player-avatar-wrap"><img class="player-avatar" data-player-avatar="${HYUHYU.escapeHTML(p.playerId)}" src="${fallbackAvatarUrl(p.playerId)}" alt="Avatar ${HYUHYU.escapeHTML(p.username)}"></div><div><h3 class="player-card-name">${HYUHYU.escapeHTML(p.username)}</h3><div class="player-card-id">PLAYER ID ${HYUHYU.escapeHTML(p.playerId)}</div></div></div><div class="player-card-stats"><div class="mini-stat"><div class="mini-stat-label">Best Time</div><div class="mini-stat-value">${HYUHYU.formatTime(p.bestTime)}</div></div><div class="mini-stat"><div class="mini-stat-label">Total Race</div><div class="mini-stat-value">${p.totalRace.toLocaleString('id-ID')}</div></div><div class="mini-stat"><div class="mini-stat-label">Checkpoint</div><div class="mini-stat-value">CP ${p.checkpoint}</div></div><div class="mini-stat"><div class="mini-stat-label">Rank</div><div class="mini-stat-value">#${allPlayers.findIndex(x=>x.playerId===p.playerId)+1}</div></div></div><div class="player-card-foot"><span>${HYUHYU.formatDate(p.updatedAt)}</span><span>VIEW <i class="bi bi-arrow-up-right"></i></span></div></article>`).join('');
-  document.getElementById('playerEmpty').classList.toggle('d-none',rows.length>0);
-  document.getElementById('playerCount').textContent=`${rows.length} RACERS`;
-  hydratePlayerAvatars();
-}
 
-async function openPlayer(id){
-  const p=await HYUHYU.getPlayer(id);
-  const avatar=document.getElementById('mAvatar');
-  avatar.src=fallbackAvatarUrl(p.playerId);
-  document.getElementById('mName').textContent=p.username;
-  document.getElementById('mId').textContent=p.playerId;
-  document.getElementById('mTime').textContent=HYUHYU.formatTime(p.bestTime);
-  document.getElementById('mRace').textContent=p.totalRace.toLocaleString('id-ID');
-  document.getElementById('mCp').textContent=`CP ${p.checkpoint}`;
-  document.getElementById('mDate').textContent=HYUHYU.formatDate(p.updatedAt);
+      <a
+        class="navbar-brand"
+        href="index.html"
+      >
 
-  bootstrap.Modal.getOrCreateInstance(document.getElementById('playerModal')).show();
-  avatar.src=await requestRobloxAvatar(p.playerId,'avatar','420x420');
-}
+        <span class="brand-mark">
 
-async function loadPlayers(){
-  try{
-    allPlayers=await HYUHYU.getPlayers(true);
-    HYUHYU.setStatus(true);
-    renderPlayers();
-  }catch(e){
-    HYUHYU.setStatus(false);
-    document.getElementById('playerGrid').innerHTML='';
-    document.getElementById('playerEmpty').classList.remove('d-none');
-    document.getElementById('playerEmpty').innerHTML='<div class="empty-icon"><i class="bi bi-cloud-slash"></i></div>REST API belum dapat diakses.';
-  }
-}
+          <i
+            class="bi bi-flag-fill"
+          ></i>
 
-document.getElementById('playerSearch').addEventListener('input',renderPlayers);
-document.getElementById('playerSort').addEventListener('change',renderPlayers);
-loadPlayers();
-setInterval(loadPlayers,15000);
-</script></body></html>
+        </span>
+
+
+        <span class="brand-copy">
+
+          <span class="brand-title">
+            HYUHYU
+          </span>
+
+          <span class="brand-sub">
+            Race Hub
+          </span>
+
+        </span>
+
+      </a>
+
+
+
+      <button
+        class="
+          navbar-toggler
+          border-0
+          shadow-none
+        "
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#mainNav"
+      >
+
+        <span
+          class="navbar-toggler-icon"
+        ></span>
+
+      </button>
+
+
+
+      <div
+        class="
+          collapse
+          navbar-collapse
+        "
+        id="mainNav"
+      >
+
+        <ul
+          class="
+            navbar-nav
+            ms-auto
+            me-lg-3
+            gap-lg-1
+          "
+        >
+
+          <li class="nav-item">
+
+            <a
+              data-nav
+              class="nav-link"
+              href="index.html"
+            >
+              Beranda
+            </a>
+
+          </li>
+
+
+          <li class="nav-item">
+
+            <a
+              data-nav
+              class="nav-link"
+              href="leaderboard.html"
+            >
+              Leaderboard
+            </a>
+
+          </li>
+
+
+          <li class="nav-item">
+
+            <a
+              data-nav
+              class="nav-link"
+              href="players.html"
+            >
+              Pemain
+            </a>
+
+          </li>
+
+
+          <li class="nav-item">
+
+            <a
+              data-nav
+              class="nav-link"
+              href="map-checkpoint.html"
+            >
+              Checkpoint
+            </a>
+
+          </li>
+
+        </ul>
+
+
+
+        <div
+          class="status-pill"
+          data-api-status
+        >
+
+          <span
+            class="status-dot"
+          ></span>
+
+          <span
+            data-status-label
+          >
+            CHECKING API
+          </span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </nav>
+
+
+
+  <!-- =========================================
+       HERO
+  ========================================== -->
+
+  <header class="page-hero">
+
+    <div class="container">
+
+
+      <span class="eyebrow">
+
+        <i
+          class="
+            bi
+            bi-person-vcard-fill
+          "
+        ></i>
+
+        Racer Database
+
+      </span>
+
+
+      <h1 class="page-title">
+
+        Pemain
+
+      </h1>
+
+
+      <p class="page-lead">
+
+        Direktori racer HYUHYU yang
+        mengambil data langsung dari
+        MongoDB melalui REST API.
+
+        Cari pemain dan lihat performa
+        race mereka secara ringkas.
+
+      </p>
+
+    </div>
+
+  </header>
+
+
+
+  <!-- =========================================
+       PLAYER DIRECTORY
+  ========================================== -->
+
+  <section
+    class="section pt-3"
+  >
+
+    <div class="container">
+
+
+      <!-- SEARCH / SORT -->
+
+      <div
+        class="panel mb-4"
+      >
+
+        <div
+          class="
+            row
+            g-3
+            align-items-center
+          "
+        >
+
+
+          <!-- Search -->
+
+          <div class="col-lg-7">
+
+            <div
+              class="position-relative"
+            >
+
+              <i
+                class="
+                  bi
+                  bi-search
+                  position-absolute
+                  top-50
+                  translate-middle-y
+                  ms-3
+                  text-secondary
+                "
+              ></i>
+
+
+              <input
+
+                id="playerSearch"
+
+                class="
+                  form-control
+                  ps-5
+                "
+
+                placeholder="
+                  Cari racer berdasarkan
+                  username atau ID...
+                "
+
+              >
+
+            </div>
+
+          </div>
+
+
+
+          <!-- Sort -->
+
+          <div class="col-lg-3">
+
+            <select
+              id="playerSort"
+              class="form-select"
+            >
+
+              <option value="rank">
+                Best Time
+              </option>
+
+              <option value="race">
+                Total Race
+              </option>
+
+              <option value="name">
+                Username A–Z
+              </option>
+
+            </select>
+
+          </div>
+
+
+
+          <!-- Count -->
+
+          <div class="col-lg-2">
+
+            <div
+              class="
+                status-pill
+                online
+                justify-content-center
+                w-100
+              "
+            >
+
+              <span
+                class="status-dot"
+              ></span>
+
+              <span
+                id="playerCount"
+              >
+                0 RACERS
+              </span>
+
+            </div>
+
+          </div>
+
+
+        </div>
+
+      </div>
+
+
+
+      <!-- PLAYER GRID -->
+
+      <div
+        id="playerGrid"
+        class="player-grid"
+      >
+
+        <div class="empty-state">
+
+          <div
+            class="
+              spinner-border
+              spinner-border-sm
+              text-warning
+              me-2
+            "
+          ></div>
+
+          Memuat racer...
+
+        </div>
+
+      </div>
+
+
+
+      <!-- EMPTY -->
+
+      <div
+        id="playerEmpty"
+        class="
+          empty-state
+          d-none
+        "
+      >
+
+        <div class="empty-icon">
+
+          <i
+            class="bi bi-person-x"
+          ></i>
+
+        </div>
+
+        Racer tidak ditemukan.
+
+      </div>
+
+
+    </div>
+
+  </section>
+
+
+
+  <!-- =========================================
+       PLAYER PROFILE MODAL
+  ========================================== -->
+
+  <div
+    class="modal fade"
+    id="playerModal"
+    tabindex="-1"
+  >
+
+    <div
+      class="
+        modal-dialog
+        modal-dialog-centered
+      "
+    >
+
+      <div
+        class="modal-content"
+      >
+
+
+        <!-- Modal Header -->
+
+        <div
+          class="modal-header"
+        >
+
+          <div>
+
+            <div
+              class="
+                section-kicker
+                mb-1
+              "
+            >
+              Racer profile
+            </div>
+
+
+            <h5
+              class="modal-title"
+            >
+              Performance Snapshot
+            </h5>
+
+          </div>
+
+
+          <button
+
+            class="btn-close"
+
+            data-bs-dismiss="modal"
+
+            aria-label="Close"
+
+          ></button>
+
+        </div>
+
+
+
+        <!-- Modal Body -->
+
+        <div
+          class="modal-body"
+        >
+
+
+          <div
+            class="profile-hero"
+          >
+
+
+            <!-- Avatar -->
+
+            <div
+              class="
+                profile-avatar-panel
+              "
+            >
+
+              <img
+
+                id="mAvatar"
+
+                class="
+                  profile-avatar
+                "
+
+                alt="
+                  Avatar Roblox pemain
+                "
+
+              >
+
+            </div>
+
+
+
+            <!-- Player Info -->
+
+            <div
+              class="profile-copy"
+            >
+
+              <h4
+                id="mName"
+                class="profile-name"
+              >
+                —
+              </h4>
+
+
+              <div
+                class="profile-id"
+              >
+
+                PLAYER ID
+
+                <span id="mId">
+                  —
+                </span>
+
+              </div>
+
+
+              <div
+                class="profile-note"
+              >
+
+                <i
+                  class="
+                    bi
+                    bi-person-bounding-box
+                    me-1
+                    text-warning
+                  "
+                ></i>
+
+                Avatar ditampilkan
+                berdasarkan Roblox User ID
+                pemain melalui backend
+                HYUHYU.
+
+              </div>
+
+            </div>
+
+
+          </div>
+
+
+
+          <!-- PLAYER STATS -->
+
+          <div
+            class="player-card-stats"
+          >
+
+
+            <div class="mini-stat">
+
+              <div
+                class="mini-stat-label"
+              >
+                Best Time
+              </div>
+
+              <div
+                id="mTime"
+                class="mini-stat-value"
+              >
+                —
+              </div>
+
+            </div>
+
+
+
+            <div class="mini-stat">
+
+              <div
+                class="mini-stat-label"
+              >
+                Total Race
+              </div>
+
+              <div
+                id="mRace"
+                class="mini-stat-value"
+              >
+                —
+              </div>
+
+            </div>
+
+
+
+            <div class="mini-stat">
+
+              <div
+                class="mini-stat-label"
+              >
+                Checkpoint
+              </div>
+
+              <div
+                id="mCp"
+                class="mini-stat-value"
+              >
+                —
+              </div>
+
+            </div>
+
+
+
+            <div class="mini-stat">
+
+              <div
+                class="mini-stat-label"
+              >
+                Last Sync
+              </div>
+
+              <div
+
+                id="mDate"
+
+                class="
+                  mini-stat-value
+                "
+
+                style="
+                  font-size:.75rem
+                "
+
+              >
+                —
+              </div>
+
+            </div>
+
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+
+  <!-- =========================================
+       FOOTER
+  ========================================== -->
+
+  <footer>
+
+    <div class="container">
+
+      <div class="footer-row">
+
+
+        <div>
+
+          <div class="footer-brand">
+
+            HYUHYU RACE HUB
+
+          </div>
+
+          <div>
+
+            Player data from centralized
+            leaderboard storage
+
+          </div>
+
+        </div>
+
+
+        <div>
+
+          ©
+          <span data-year></span>
+          HYUHYU Research Project
+
+        </div>
+
+
+      </div>
+
+    </div>
+
+  </footer>
+
+
+
+  <!-- =========================================
+       SCRIPTS
+  ========================================== -->
+
+  <script
+    src="
+      https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js
+    "
+  ></script>
+
+
+  <script
+    src="assets/app.js"
+  ></script>
+
+
+
+  <script>
+
+    // =============================================
+    // PLAYER DATA
+    // =============================================
+
+    let allPlayers = [];
+
+
+    // =============================================
+    // LOCAL PLACEHOLDER
+    // =============================================
+
+    function localAvatarPlaceholder() {
+
+      const svg = `
+
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 150 150"
+          width="150"
+          height="150"
+        >
+
+          <rect
+            width="150"
+            height="150"
+            rx="25"
+            fill="#0b1018"
+          />
+
+          <circle
+            cx="75"
+            cy="57"
+            r="25"
+            fill="#f5a623"
+          />
+
+          <path
+            d="
+              M29 133
+              C34 104
+              52 89
+              75 89
+              C98 89
+              116 104
+              121 133
+            "
+            fill="#f5a623"
+          />
+
+        </svg>
+
+      `;
+
+
+      return (
+
+        'data:image/svg+xml;charset=UTF-8,' +
+
+        encodeURIComponent(svg)
+
+      );
+
+    }
+
+
+
+    // =============================================
+    // AVATAR URL
+    // =============================================
+
+    function headshotAvatarUrl(
+      playerId
+    ) {
+
+      return HYUHYU.avatarUrl(
+        playerId,
+        'headshot'
+      );
+
+    }
+
+
+
+    function bustAvatarUrl(
+      playerId
+    ) {
+
+      return HYUHYU.avatarUrl(
+        playerId,
+        'bust'
+      );
+
+    }
+
+
+
+    function fullAvatarUrl(
+      playerId
+    ) {
+
+      return HYUHYU.avatarUrl(
+        playerId,
+        'full'
+      );
+
+    }
+
+
+
+    // =============================================
+    // CARD AVATAR FALLBACK
+    // =============================================
+
+    function cardAvatarFallback(
+      img,
+      playerId
+    ) {
+
+      const step =
+        Number(
+          img.dataset.fallbackStep ||
+          0
+        );
+
+
+      // Bust gagal
+      // coba headshot
+      if (step === 0) {
+
+        img.dataset.fallbackStep =
+          '1';
+
+        img.src =
+          headshotAvatarUrl(
+            playerId
+          );
+
+        return;
+
+      }
+
+
+      // Headshot gagal
+      // gunakan placeholder lokal
+      img.dataset.fallbackStep =
+        '2';
+
+      img.onerror = null;
+
+      img.src =
+        localAvatarPlaceholder();
+
+    }
+
+
+
+    // =============================================
+    // MODAL AVATAR FALLBACK
+    // =============================================
+
+    function modalAvatarFallback(
+      img,
+      playerId
+    ) {
+
+      const step =
+        Number(
+          img.dataset.fallbackStep ||
+          0
+        );
+
+
+      // Full body gagal
+      // coba bust
+      if (step === 0) {
+
+        img.dataset.fallbackStep =
+          '1';
+
+        img.src =
+          bustAvatarUrl(
+            playerId
+          );
+
+        return;
+
+      }
+
+
+      // Bust gagal
+      // coba headshot
+      if (step === 1) {
+
+        img.dataset.fallbackStep =
+          '2';
+
+        img.src =
+          headshotAvatarUrl(
+            playerId
+          );
+
+        return;
+
+      }
+
+
+      // Semua gagal
+      img.dataset.fallbackStep =
+        '3';
+
+      img.onerror = null;
+
+      img.src =
+        localAvatarPlaceholder();
+
+    }
+
+
+
+    // =============================================
+    // RENDER PLAYERS
+    // =============================================
+
+    function renderPlayers() {
+
+
+      const searchElement =
+        document.getElementById(
+          'playerSearch'
+        );
+
+
+      const sortElement =
+        document.getElementById(
+          'playerSort'
+        );
+
+
+      const q =
+        searchElement
+          .value
+          .trim()
+          .toLowerCase();
+
+
+      const mode =
+        sortElement.value;
+
+
+
+      let rows =
+        allPlayers.filter(
+          player => {
+
+            return (
+
+              player.username
+                .toLowerCase()
+                .includes(q)
+
+              ||
+
+              player.playerId
+                .toLowerCase()
+                .includes(q)
+
+            );
+
+          }
+        );
+
+
+
+      // =========================================
+      // SORT
+      // =========================================
+
+      rows.sort(
+        (a, b) => {
+
+          if (
+            mode === 'race'
+          ) {
+
+            return (
+              b.totalRace -
+              a.totalRace
+            );
+
+          }
+
+
+          if (
+            mode === 'name'
+          ) {
+
+            return (
+              a.username.localeCompare(
+                b.username
+              )
+            );
+
+          }
+
+
+          return (
+            a.bestTime -
+            b.bestTime
+          );
+
+        }
+      );
+
+
+
+      const grid =
+        document.getElementById(
+          'playerGrid'
+        );
+
+
+
+      // =========================================
+      // CREATE CARDS
+      // =========================================
+
+      grid.innerHTML =
+        rows.map(
+          player => {
+
+
+            const rank =
+
+              allPlayers.findIndex(
+                item =>
+                  item.playerId ===
+                  player.playerId
+              )
+
+              + 1;
+
+
+
+            const safeId =
+              HYUHYU.escapeHTML(
+                player.playerId
+              );
+
+
+            const safeName =
+              HYUHYU.escapeHTML(
+                player.username
+              );
+
+
+
+            return `
+
+              <article
+
+                class="
+                  player-card
+                "
+
+                role="button"
+
+                tabindex="0"
+
+                onclick="
+                  openPlayer(
+                    '${safeId}'
+                  )
+                "
+
+                onkeydown="
+
+                  if(
+                    event.key === 'Enter'
+                    ||
+                    event.key === ' '
+                  ){
+
+                    event.preventDefault();
+
+                    openPlayer(
+                      '${safeId}'
+                    );
+
+                  }
+
+                "
+
+              >
+
+
+                <!-- HEAD -->
+
+                <div
+                  class="
+                    player-card-head
+                  "
+                >
+
+
+                  <div
+                    class="
+                      player-avatar-wrap
+                    "
+                  >
+
+                    <img
+
+                      class="
+                        player-avatar
+                      "
+
+                      src="
+                        ${bustAvatarUrl(
+                          player.playerId
+                        )}
+                      "
+
+                      alt="
+                        Avatar ${safeName}
+                      "
+
+                      loading="lazy"
+
+                      referrerpolicy="
+                        no-referrer
+                      "
+
+                      data-fallback-step="
+                        0
+                      "
+
+                      onerror="
+                        cardAvatarFallback(
+                          this,
+                          '${safeId}'
+                        )
+                      "
+
+                    >
+
+                  </div>
+
+
+
+                  <div>
+
+                    <h3
+                      class="
+                        player-card-name
+                      "
+                    >
+
+                      ${safeName}
+
+                    </h3>
+
+
+                    <div
+                      class="
+                        player-card-id
+                      "
+                    >
+
+                      PLAYER ID
+                      ${safeId}
+
+                    </div>
+
+                  </div>
+
+
+                </div>
+
+
+
+                <!-- STATS -->
+
+                <div
+                  class="
+                    player-card-stats
+                  "
+                >
+
+
+                  <div
+                    class="
+                      mini-stat
+                    "
+                  >
+
+                    <div
+                      class="
+                        mini-stat-label
+                      "
+                    >
+                      Best Time
+                    </div>
+
+                    <div
+                      class="
+                        mini-stat-value
+                      "
+                    >
+
+                      ${HYUHYU.formatTime(
+                        player.bestTime
+                      )}
+
+                    </div>
+
+                  </div>
+
+
+
+                  <div
+                    class="
+                      mini-stat
+                    "
+                  >
+
+                    <div
+                      class="
+                        mini-stat-label
+                      "
+                    >
+                      Total Race
+                    </div>
+
+                    <div
+                      class="
+                        mini-stat-value
+                      "
+                    >
+
+                      ${player.totalRace
+                        .toLocaleString(
+                          'id-ID'
+                        )}
+
+                    </div>
+
+                  </div>
+
+
+
+                  <div
+                    class="
+                      mini-stat
+                    "
+                  >
+
+                    <div
+                      class="
+                        mini-stat-label
+                      "
+                    >
+                      Checkpoint
+                    </div>
+
+                    <div
+                      class="
+                        mini-stat-value
+                      "
+                    >
+
+                      CP
+                      ${player.checkpoint}
+
+                    </div>
+
+                  </div>
+
+
+
+                  <div
+                    class="
+                      mini-stat
+                    "
+                  >
+
+                    <div
+                      class="
+                        mini-stat-label
+                      "
+                    >
+                      Rank
+                    </div>
+
+                    <div
+                      class="
+                        mini-stat-value
+                      "
+                    >
+
+                      #${rank}
+
+                    </div>
+
+                  </div>
+
+
+                </div>
+
+
+
+                <!-- FOOT -->
+
+                <div
+                  class="
+                    player-card-foot
+                  "
+                >
+
+                  <span>
+
+                    ${HYUHYU.formatDate(
+                      player.updatedAt
+                    )}
+
+                  </span>
+
+
+                  <span>
+
+                    VIEW
+
+                    <i
+                      class="
+                        bi
+                        bi-arrow-up-right
+                      "
+                    ></i>
+
+                  </span>
+
+                </div>
+
+
+              </article>
+
+            `;
+
+          }
+
+        ).join('');
+
+
+
+      // =========================================
+      // EMPTY STATE
+      // =========================================
+
+      document
+        .getElementById(
+          'playerEmpty'
+        )
+        .classList.toggle(
+          'd-none',
+          rows.length > 0
+        );
+
+
+
+      // =========================================
+      // PLAYER COUNT
+      // =========================================
+
+      document
+        .getElementById(
+          'playerCount'
+        )
+        .textContent =
+
+          `${rows.length} RACERS`;
+
+    }
+
+
+
+    // =============================================
+    // OPEN PLAYER PROFILE
+    // =============================================
+
+    async function openPlayer(id) {
+
+      try {
+
+
+        const player =
+          await HYUHYU.getPlayer(
+            id
+          );
+
+
+
+        // =========================================
+        // AVATAR
+        // =========================================
+
+        const avatar =
+          document.getElementById(
+            'mAvatar'
+          );
+
+
+        avatar.dataset.fallbackStep =
+          '0';
+
+
+        avatar.onerror =
+          function() {
+
+            modalAvatarFallback(
+              this,
+              player.playerId
+            );
+
+          };
+
+
+        avatar.src =
+          fullAvatarUrl(
+            player.playerId
+          );
+
+
+
+        // =========================================
+        // PLAYER DATA
+        // =========================================
+
+        document
+          .getElementById(
+            'mName'
+          )
+          .textContent =
+            player.username;
+
+
+
+        document
+          .getElementById(
+            'mId'
+          )
+          .textContent =
+            player.playerId;
+
+
+
+        document
+          .getElementById(
+            'mTime'
+          )
+          .textContent =
+            HYUHYU.formatTime(
+              player.bestTime
+            );
+
+
+
+        document
+          .getElementById(
+            'mRace'
+          )
+          .textContent =
+            player.totalRace
+              .toLocaleString(
+                'id-ID'
+              );
+
+
+
+        document
+          .getElementById(
+            'mCp'
+          )
+          .textContent =
+            `CP ${player.checkpoint}`;
+
+
+
+        document
+          .getElementById(
+            'mDate'
+          )
+          .textContent =
+            HYUHYU.formatDate(
+              player.updatedAt
+            );
+
+
+
+        // =========================================
+        // SHOW MODAL
+        // =========================================
+
+        bootstrap.Modal
+          .getOrCreateInstance(
+
+            document
+              .getElementById(
+                'playerModal'
+              )
+
+          )
+          .show();
+
+
+      } catch (error) {
+
+
+        console.error(
+          'Gagal membuka profil pemain:',
+          error
+        );
+
+
+      }
+
+    }
+
+
+
+    // =============================================
+    // LOAD PLAYERS
+    // =============================================
+
+    async function loadPlayers() {
+
+      try {
+
+
+        allPlayers =
+          await HYUHYU.getPlayers(
+            true
+          );
+
+
+        HYUHYU.setStatus(
+          true
+        );
+
+
+        renderPlayers();
+
+
+      } catch (error) {
+
+
+        console.error(
+          'Gagal mengambil player:',
+          error
+        );
+
+
+        HYUHYU.setStatus(
+          false
+        );
+
+
+        document
+          .getElementById(
+            'playerGrid'
+          )
+          .innerHTML = '';
+
+
+        const empty =
+          document.getElementById(
+            'playerEmpty'
+          );
+
+
+        empty.classList.remove(
+          'd-none'
+        );
+
+
+        empty.innerHTML = `
+
+          <div
+            class="
+              empty-icon
+            "
+          >
+
+            <i
+              class="
+                bi
+                bi-cloud-slash
+              "
+            ></i>
+
+          </div>
+
+          REST API belum dapat diakses.
+
+        `;
+
+
+      }
+
+    }
+
+
+
+    // =============================================
+    // SEARCH
+    // =============================================
+
+    document
+      .getElementById(
+        'playerSearch'
+      )
+      .addEventListener(
+        'input',
+        renderPlayers
+      );
+
+
+
+    // =============================================
+    // SORT
+    // =============================================
+
+    document
+      .getElementById(
+        'playerSort'
+      )
+      .addEventListener(
+        'change',
+        renderPlayers
+      );
+
+
+
+    // =============================================
+    // INITIAL LOAD
+    // =============================================
+
+    loadPlayers();
+
+
+
+    // =============================================
+    // AUTO REFRESH
+    // =============================================
+
+    setInterval(
+      loadPlayers,
+      15000
+    );
+
+
+  </script>
+
+
+</body>
+
+</html>
