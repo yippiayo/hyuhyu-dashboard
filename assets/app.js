@@ -1,19 +1,10 @@
 const HYUHYU = (() => {
 
-  // =========================================================
-  // HYUHYU API
-  // =========================================================
-
   const API_BASE =
     'https://leaderboard-api-production-64a5.up.railway.app/api';
 
-  const ROBLOX_THUMBNAIL_API =
-    'https://thumbnails.roblox.com/v1/users/avatar-headshot';
-
   let cachedPlayers = [];
   let cachedStats = null;
-
-  const avatarCache = new Map();
 
 
   // =========================================================
@@ -21,391 +12,45 @@ const HYUHYU = (() => {
   // =========================================================
 
   const escapeHTML = (value = '') =>
-    String(value).replace(
-      /[&<>'"]/g,
-      char => ({
-        '&': '&amp;',
-        '<': '&lt;',
-        '>': '&gt;',
-        "'": '&#39;',
-        '"': '&quot;'
-      }[char])
-    );
+    String(value).replace(/[&<>'"]/g, char => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      "'": '&#39;',
+      '"': '&quot;'
+    }[char]));
 
 
   // =========================================================
-  // AVATAR PLACEHOLDER
+  // ROBLOX AVATAR
+  // Sekarang melalui backend Railway
   // =========================================================
 
-  const avatarPlaceholder = (playerId = '') => {
+  const avatarUrl = (playerId, type = 'headshot') => {
 
-    const svg = `
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="150"
-        height="150"
-        viewBox="0 0 150 150"
-      >
+    const id =
+      encodeURIComponent(
+        String(playerId || '')
+      );
 
-        <rect
-          width="150"
-          height="150"
-          rx="28"
-          fill="#0b0f16"
-        />
+    const avatarType =
+      encodeURIComponent(type);
 
-        <circle
-          cx="75"
-          cy="58"
-          r="25"
-          fill="#f5a623"
-        />
-
-        <path
-          d="M30 132c5-27 22-42 45-42s40 15 45 42"
-          fill="#f5a623"
-        />
-
-      </svg>
-    `;
-
-    return (
-      `data:image/svg+xml;charset=UTF-8,` +
-      encodeURIComponent(svg) +
-      `#uid=${encodeURIComponent(String(playerId))}`
-    );
+    return `${API_BASE}/avatar/${id}?type=${avatarType}`;
 
   };
 
 
   // =========================================================
-  // FUNGSI INI TETAP DIPAKAI OLEH HALAMAN HTML
-  // =========================================================
-
-  const avatarUrl = (playerId) => {
-
-    return avatarPlaceholder(playerId);
-
-  };
-
-
-  // =========================================================
-  // AMBIL PLAYER ID DARI GAMBAR
-  // =========================================================
-
-  const getAvatarId = (img) => {
-
-    if (!img) {
-      return null;
-    }
-
-    if (img.dataset.playerAvatar) {
-
-      return String(
-        img.dataset.playerAvatar
-      );
-
-    }
-
-    const src =
-      img.getAttribute('src') || '';
-
-    const match =
-      src.match(/#uid=([^&]+)/);
-
-    if (!match) {
-      return null;
-    }
-
-    try {
-
-      return decodeURIComponent(
-        match[1]
-      );
-
-    } catch {
-
-      return match[1];
-
-    }
-
-  };
-
-
-  // =========================================================
-  // REQUEST AVATAR KE ROBLOX
-  // =========================================================
-
-  const fetchRobloxAvatar =
-    async (playerId) => {
-
-      const id =
-        String(
-          playerId ?? ''
-        ).trim();
-
-      // Roblox User ID harus angka
-      if (!/^\d+$/.test(id)) {
-
-        throw new Error(
-          'Invalid Roblox User ID'
-        );
-
-      }
-
-      // Gunakan cache jika sudah pernah diminta
-      if (avatarCache.has(id)) {
-
-        return avatarCache.get(id);
-
-      }
-
-      const avatarPromise = fetch(
-
-        `${ROBLOX_THUMBNAIL_API}` +
-        `?userIds=${encodeURIComponent(id)}` +
-        `&size=150x150` +
-        `&format=Png` +
-        `&isCircular=false`,
-
-        {
-          method: 'GET',
-
-          headers: {
-            Accept: 'application/json'
-          }
-        }
-
-      )
-
-        .then(response => {
-
-          if (!response.ok) {
-
-            throw new Error(
-              `Roblox thumbnail HTTP ${response.status}`
-            );
-
-          }
-
-          return response.json();
-
-        })
-
-        .then(result => {
-
-          const item =
-            Array.isArray(result?.data)
-              ? result.data[0]
-              : null;
-
-          if (!item) {
-
-            throw new Error(
-              'Roblox avatar not found'
-            );
-
-          }
-
-          // Roblox kadang masih membuat thumbnail
-          if (
-            item.state &&
-            item.state !== 'Completed'
-          ) {
-
-            throw new Error(
-              `Roblox thumbnail state: ${item.state}`
-            );
-
-          }
-
-          if (!item.imageUrl) {
-
-            throw new Error(
-              'Roblox avatar image unavailable'
-            );
-
-          }
-
-          return item.imageUrl;
-
-        })
-
-        .catch(error => {
-
-          // Hapus dari cache agar bisa dicoba ulang
-          avatarCache.delete(id);
-
-          throw error;
-
-        });
-
-      avatarCache.set(
-        id,
-        avatarPromise
-      );
-
-      return avatarPromise;
-
-    };
-
-
-  // =========================================================
-  // RESOLVE SATU IMAGE
-  // =========================================================
-
-  const resolveRobloxAvatar =
-    async (img) => {
-
-      if (
-        !(img instanceof HTMLImageElement)
-      ) {
-        return;
-      }
-
-      // Jangan proses ulang jika sudah selesai/loading
-      if (
-        img.dataset.avatarState === 'loading' ||
-        img.dataset.avatarState === 'done'
-      ) {
-        return;
-      }
-
-      const id =
-        getAvatarId(img);
-
-      if (!id) {
-        return;
-      }
-
-      img.dataset.avatarState =
-        'loading';
-
-      try {
-
-        const robloxAvatarUrl =
-          await fetchRobloxAvatar(id);
-
-        img.src =
-          robloxAvatarUrl;
-
-        img.dataset.avatarState =
-          'done';
-
-      } catch (error) {
-
-        console.warn(
-          `Avatar Roblox gagal dimuat untuk ${id}:`,
-          error
-        );
-
-        img.src =
-          avatarPlaceholder('');
-
-        img.dataset.avatarState =
-          'fallback';
-
-      }
-
-    };
-
-
-  // =========================================================
-  // RESOLVE SEMUA AVATAR
-  // =========================================================
-
-  const resolveRobloxAvatars =
-    (root = document) => {
-
-      if (
-        root instanceof HTMLImageElement
-      ) {
-
-        resolveRobloxAvatar(root);
-
-      }
-
-      if (
-        root &&
-        typeof root.querySelectorAll === 'function'
-      ) {
-
-        root
-          .querySelectorAll('img')
-          .forEach(img => {
-
-            resolveRobloxAvatar(img);
-
-          });
-
-      }
-
-    };
-
-
-  // =========================================================
-  // OBSERVER
-  // Mendukung card yang dibuat setelah API selesai loading
-  // =========================================================
-
-  const observeRobloxAvatars = () => {
-
-    resolveRobloxAvatars(document);
-
-    const observer =
-      new MutationObserver(
-        mutations => {
-
-          mutations.forEach(
-            mutation => {
-
-              mutation
-                .addedNodes
-                .forEach(node => {
-
-                  if (
-                    node.nodeType ===
-                    Node.ELEMENT_NODE
-                  ) {
-
-                    resolveRobloxAvatars(
-                      node
-                    );
-
-                  }
-
-                });
-
-            }
-          );
-
-        }
-      );
-
-    observer.observe(
-      document.body,
-      {
-        childList: true,
-        subtree: true
-      }
-    );
-
-  };
-
-
-  // =========================================================
-  // FORMAT WAKTU
+  // FORMAT TIME
   // =========================================================
 
   const formatTime = (seconds) => {
 
-    const n =
-      Number(seconds);
+    const n = Number(seconds);
 
     if (!Number.isFinite(n)) {
-
       return '—';
-
     }
 
     const mins =
@@ -416,24 +61,20 @@ const HYUHYU = (() => {
 
     return (
       `${String(mins).padStart(2, '0')}:` +
-      `${secs
-        .toFixed(2)
-        .padStart(5, '0')}`
+      `${secs.toFixed(2).padStart(5, '0')}`
     );
 
   };
 
 
   // =========================================================
-  // FORMAT TANGGAL
+  // FORMAT DATE
   // =========================================================
 
   const formatDate = (value) => {
 
     if (!value) {
-
       return '—';
-
     }
 
     const date =
@@ -444,9 +85,7 @@ const HYUHYU = (() => {
         date.getTime()
       )
     ) {
-
       return '—';
-
     }
 
     return new Intl.DateTimeFormat(
@@ -468,18 +107,14 @@ const HYUHYU = (() => {
   // =========================================================
 
   const request =
-    async (
-      path,
-      options = {}
-    ) => {
+    async (path, options = {}) => {
 
       const controller =
         new AbortController();
 
       const timeout =
         setTimeout(
-          () =>
-            controller.abort(),
+          () => controller.abort(),
           9000
         );
 
@@ -495,14 +130,11 @@ const HYUHYU = (() => {
                 controller.signal,
 
               headers: {
-
                 Accept:
                   'application/json',
 
                 ...(options.headers || {})
-
               }
-
             }
           );
 
@@ -526,7 +158,7 @@ const HYUHYU = (() => {
 
 
   // =========================================================
-  // NORMALISASI PLAYER
+  // NORMALIZE PLAYER
   // =========================================================
 
   const normalizePlayer =
@@ -577,9 +209,7 @@ const HYUHYU = (() => {
         cachedPlayers.length &&
         !force
       ) {
-
         return cachedPlayers;
-
       }
 
       const data =
@@ -594,9 +224,7 @@ const HYUHYU = (() => {
             : []
         )
 
-          .map(
-            normalizePlayer
-          )
+          .map(normalizePlayer)
 
           .filter(
             player =>
@@ -627,9 +255,7 @@ const HYUHYU = (() => {
         cachedStats &&
         !force
       ) {
-
         return cachedStats;
-
       }
 
       try {
@@ -653,10 +279,7 @@ const HYUHYU = (() => {
 
           totalRace:
             players.reduce(
-              (
-                sum,
-                player
-              ) =>
+              (sum, player) =>
                 sum +
                 (
                   player.totalRace ||
@@ -692,11 +315,7 @@ const HYUHYU = (() => {
         return normalizePlayer(
 
           await request(
-
-            `/leaderboard/player/${encodeURIComponent(
-              id
-            )}`
-
+            `/leaderboard/player/${encodeURIComponent(id)}`
           )
 
         );
@@ -714,9 +333,7 @@ const HYUHYU = (() => {
           );
 
         if (!found) {
-
           throw error;
-
         }
 
         return found;
@@ -800,7 +417,7 @@ const HYUHYU = (() => {
 
 
   // =========================================================
-  // ACTIVE NAVIGATION
+  // ACTIVE NAV
   // =========================================================
 
   const activeNav = () => {
@@ -830,7 +447,7 @@ const HYUHYU = (() => {
 
 
   // =========================================================
-  // FOOTER YEAR
+  // FOOTER
   // =========================================================
 
   const renderFooterYear = () => {
@@ -853,17 +470,12 @@ const HYUHYU = (() => {
   // =========================================================
 
   const animateNumber =
-    (
-      el,
-      value
-    ) => {
+    (el, value) => {
 
       const target =
         Number(value);
 
-      if (
-        !Number.isFinite(target)
-      ) {
+      if (!Number.isFinite(target)) {
 
         el.textContent = '—';
 
@@ -883,10 +495,7 @@ const HYUHYU = (() => {
 
           const progress =
             Math.min(
-              (
-                now -
-                start
-              ) /
+              (now - start) /
               duration,
               1
             );
@@ -894,8 +503,7 @@ const HYUHYU = (() => {
           const eased =
             1 -
             Math.pow(
-              1 -
-              progress,
+              1 - progress,
               3
             );
 
@@ -911,9 +519,7 @@ const HYUHYU = (() => {
               'id-ID'
             );
 
-          if (
-            progress < 1
-          ) {
+          if (progress < 1) {
 
             requestAnimationFrame(
               step
@@ -923,9 +529,7 @@ const HYUHYU = (() => {
 
         };
 
-      requestAnimationFrame(
-        step
-      );
+      requestAnimationFrame(step);
 
     };
 
@@ -939,17 +543,14 @@ const HYUHYU = (() => {
     () => {
 
       activeNav();
-
       renderFooterYear();
-
-      observeRobloxAvatars();
 
     }
   );
 
 
   // =========================================================
-  // PUBLIC FUNCTIONS
+  // PUBLIC
   // =========================================================
 
   return {
@@ -957,10 +558,6 @@ const HYUHYU = (() => {
     API_BASE,
 
     avatarUrl,
-
-    fetchRobloxAvatar,
-
-    resolveRobloxAvatars,
 
     formatTime,
 
