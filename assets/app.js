@@ -1,5 +1,9 @@
 const HYUHYU = (() => {
 
+  // =========================================================
+  // CONFIGURATION
+  // =========================================================
+
   const API_BASE =
     'https://leaderboard-api-production-64a5.up.railway.app/api';
 
@@ -8,25 +12,37 @@ const HYUHYU = (() => {
 
 
   // =========================================================
-  // UTILITIES
+  // ESCAPE HTML
   // =========================================================
 
   const escapeHTML = (value = '') =>
-    String(value).replace(/[&<>'"]/g, char => ({
-      '&': '&amp;',
-      '<': '&lt;',
-      '>': '&gt;',
-      "'": '&#39;',
-      '"': '&quot;'
-    }[char]));
+    String(value).replace(
+      /[&<>'"]/g,
+      char => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        "'": '&#39;',
+        '"': '&quot;'
+      }[char])
+    );
 
 
   // =========================================================
   // ROBLOX AVATAR
-  // Sekarang melalui backend Railway
+  // Avatar diambil melalui backend Railway
+  // untuk menghindari masalah CORS.
+  //
+  // type:
+  // headshot
+  // bust
+  // full
   // =========================================================
 
-  const avatarUrl = (playerId, type = 'headshot') => {
+  const avatarUrl = (
+    playerId,
+    type = 'headshot'
+  ) => {
 
     const id =
       encodeURIComponent(
@@ -34,72 +50,393 @@ const HYUHYU = (() => {
       );
 
     const avatarType =
-      encodeURIComponent(type);
-
-    return `${API_BASE}/avatar/${id}?type=${avatarType}`;
-
-  };
-
-
-  // =========================================================
-  // FORMAT TIME
-  // =========================================================
-
-  const formatTime = (seconds) => {
-
-    const n = Number(seconds);
-
-    if (!Number.isFinite(n)) {
-      return '—';
-    }
-
-    const mins =
-      Math.floor(n / 60);
-
-    const secs =
-      n - mins * 60;
+      encodeURIComponent(
+        String(type || 'headshot')
+      );
 
     return (
-      `${String(mins).padStart(2, '0')}:` +
-      `${secs.toFixed(2).padStart(5, '0')}`
+      `${API_BASE}/avatar/` +
+      `${id}` +
+      `?type=${avatarType}`
     );
 
   };
 
 
   // =========================================================
+  // QUICKSORT
+  // =========================================================
+  //
+  // Implementasi QuickSort menggunakan pivot tengah.
+  //
+  // Fungsi ini bekerja secara in-place pada array.
+  //
+  // Comparator:
+  // < 0 = a sebelum b
+  // > 0 = a sesudah b
+  // = 0 = sama
+  //
+  // =========================================================
+
+  const quickSort = (
+    array,
+    compare,
+    left = 0,
+    right = array.length - 1
+  ) => {
+
+    // Jika bukan array
+    if (!Array.isArray(array)) {
+      return [];
+    }
+
+
+    // Array kosong / satu elemen
+    if (
+      array.length <= 1 ||
+      left >= right
+    ) {
+
+      return array;
+
+    }
+
+
+    let i = left;
+    let j = right;
+
+
+    // Pivot menggunakan elemen tengah
+    const pivot =
+      array[
+        Math.floor(
+          (left + right) / 2
+        )
+      ];
+
+
+    // =====================================================
+    // PARTITION
+    // =====================================================
+
+    while (i <= j) {
+
+      while (
+        compare(
+          array[i],
+          pivot
+        ) < 0
+      ) {
+
+        i++;
+
+      }
+
+
+      while (
+        compare(
+          array[j],
+          pivot
+        ) > 0
+      ) {
+
+        j--;
+
+      }
+
+
+      if (i <= j) {
+
+        const temp =
+          array[i];
+
+        array[i] =
+          array[j];
+
+        array[j] =
+          temp;
+
+
+        i++;
+        j--;
+
+      }
+
+    }
+
+
+    // =====================================================
+    // REKURSIF BAGIAN KIRI
+    // =====================================================
+
+    if (left < j) {
+
+      quickSort(
+        array,
+        compare,
+        left,
+        j
+      );
+
+    }
+
+
+    // =====================================================
+    // REKURSIF BAGIAN KANAN
+    // =====================================================
+
+    if (i < right) {
+
+      quickSort(
+        array,
+        compare,
+        i,
+        right
+      );
+
+    }
+
+
+    return array;
+
+  };
+
+
+  // =========================================================
+  // QUICKSORT UNTUK PLAYER
+  // bestTime terkecil = peringkat lebih tinggi
+  // =========================================================
+
+  const sortPlayersByBestTime =
+    players => {
+
+      if (!Array.isArray(players)) {
+        return [];
+      }
+
+
+      // Copy array agar data asli
+      // tidak dimodifikasi langsung.
+      const result =
+        [...players];
+
+
+      quickSort(
+        result,
+
+        (a, b) => {
+
+          const timeA =
+            Number(a.bestTime);
+
+          const timeB =
+            Number(b.bestTime);
+
+
+          // ===============================================
+          // DATA INVALID
+          // ===============================================
+
+          if (
+            !Number.isFinite(timeA) &&
+            !Number.isFinite(timeB)
+          ) {
+
+            return 0;
+
+          }
+
+
+          if (
+            !Number.isFinite(timeA)
+          ) {
+
+            return 1;
+
+          }
+
+
+          if (
+            !Number.isFinite(timeB)
+          ) {
+
+            return -1;
+
+          }
+
+
+          // ===============================================
+          // BEST TIME
+          // ===============================================
+
+          if (timeA < timeB) {
+            return -1;
+          }
+
+
+          if (timeA > timeB) {
+            return 1;
+          }
+
+
+          // ===============================================
+          // JIKA WAKTU SAMA
+          // gunakan username agar hasil deterministik
+          // ===============================================
+
+          return String(
+            a.username || ''
+          ).localeCompare(
+            String(
+              b.username || ''
+            )
+          );
+
+        }
+
+      );
+
+
+      return result;
+
+    };
+
+
+  // =========================================================
+  // QUICKSORT ANGKA
+  // Dipakai untuk Boundary Testing
+  //
+  // Contoh:
+  // HYUHYU.quickSortNumbers([5,3,1,4,2])
+  //
+  // Output:
+  // [1,2,3,4,5]
+  // =========================================================
+
+  const quickSortNumbers =
+    values => {
+
+      if (!Array.isArray(values)) {
+        return [];
+      }
+
+
+      const result =
+        values.map(
+          value =>
+            Number(value)
+        );
+
+
+      quickSort(
+        result,
+        (a, b) =>
+          a - b
+      );
+
+
+      return result;
+
+    };
+
+
+  // =========================================================
+  // FORMAT TIME
+  // =========================================================
+
+  const formatTime =
+    seconds => {
+
+      const n =
+        Number(seconds);
+
+
+      if (
+        !Number.isFinite(n)
+      ) {
+
+        return '—';
+
+      }
+
+
+      const mins =
+        Math.floor(
+          n / 60
+        );
+
+
+      const secs =
+        n -
+        mins * 60;
+
+
+      return (
+        `${String(mins)
+          .padStart(2, '0')}:` +
+
+        `${secs
+          .toFixed(2)
+          .padStart(5, '0')}`
+      );
+
+    };
+
+
+  // =========================================================
   // FORMAT DATE
   // =========================================================
 
-  const formatDate = (value) => {
+  const formatDate =
+    value => {
 
-    if (!value) {
-      return '—';
-    }
+      if (!value) {
 
-    const date =
-      new Date(value);
+        return '—';
 
-    if (
-      Number.isNaN(
-        date.getTime()
-      )
-    ) {
-      return '—';
-    }
-
-    return new Intl.DateTimeFormat(
-      'id-ID',
-      {
-        day: '2-digit',
-        month: 'short',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
       }
-    ).format(date);
 
-  };
+
+      const date =
+        new Date(value);
+
+
+      if (
+        Number.isNaN(
+          date.getTime()
+        )
+      ) {
+
+        return '—';
+
+      }
+
+
+      return new Intl
+        .DateTimeFormat(
+          'id-ID',
+          {
+
+            day:
+              '2-digit',
+
+            month:
+              'short',
+
+            year:
+              'numeric',
+
+            hour:
+              '2-digit',
+
+            minute:
+              '2-digit'
+
+          }
+        )
+        .format(date);
+
+    };
 
 
   // =========================================================
@@ -107,16 +444,22 @@ const HYUHYU = (() => {
   // =========================================================
 
   const request =
-    async (path, options = {}) => {
+    async (
+      path,
+      options = {}
+    ) => {
 
       const controller =
         new AbortController();
 
+
       const timeout =
         setTimeout(
-          () => controller.abort(),
+          () =>
+            controller.abort(),
           9000
         );
+
 
       try {
 
@@ -124,19 +467,27 @@ const HYUHYU = (() => {
           await fetch(
             `${API_BASE}${path}`,
             {
+
               ...options,
 
               signal:
                 controller.signal,
 
               headers: {
+
                 Accept:
                   'application/json',
 
-                ...(options.headers || {})
+                ...(
+                  options.headers ||
+                  {}
+                )
+
               }
+
             }
           );
+
 
         if (!response.ok) {
 
@@ -146,11 +497,15 @@ const HYUHYU = (() => {
 
         }
 
+
         return await response.json();
+
 
       } finally {
 
-        clearTimeout(timeout);
+        clearTimeout(
+          timeout
+        );
 
       }
 
@@ -182,12 +537,14 @@ const HYUHYU = (() => {
 
       totalRace:
         Number(
-          player.totalRace ?? 0
+          player.totalRace ??
+          0
         ),
 
       checkpoint:
         Number(
-          player.checkpoint ?? 0
+          player.checkpoint ??
+          0
         ),
 
       updatedAt:
@@ -203,41 +560,57 @@ const HYUHYU = (() => {
   // =========================================================
 
   const getPlayers =
-    async (force = false) => {
+    async (
+      force = false
+    ) => {
 
+      // Gunakan cache
       if (
         cachedPlayers.length &&
         !force
       ) {
+
         return cachedPlayers;
+
       }
 
+
+      // Request leaderboard
       const data =
         await request(
           '/leaderboard'
         );
 
-      cachedPlayers =
+
+      // Normalisasi data
+      const normalized =
         (
           Array.isArray(data)
             ? data
             : []
         )
 
-          .map(normalizePlayer)
+          .map(
+            normalizePlayer
+          )
 
           .filter(
             player =>
               Number.isFinite(
                 player.bestTime
               )
-          )
-
-          .sort(
-            (a, b) =>
-              a.bestTime -
-              b.bestTime
           );
+
+
+      // =====================================================
+      // QUICKSORT LEADERBOARD
+      // =====================================================
+
+      cachedPlayers =
+        sortPlayersByBestTime(
+          normalized
+        );
+
 
       return cachedPlayers;
 
@@ -249,14 +622,19 @@ const HYUHYU = (() => {
   // =========================================================
 
   const getStats =
-    async (force = false) => {
+    async (
+      force = false
+    ) => {
 
       if (
         cachedStats &&
         !force
       ) {
+
         return cachedStats;
+
       }
+
 
       try {
 
@@ -265,12 +643,22 @@ const HYUHYU = (() => {
             '/leaderboard/stats'
           );
 
+
         return cachedStats;
+
 
       } catch (error) {
 
+
+        // ===============================================
+        // FALLBACK STATS
+        // ===============================================
+
         const players =
-          await getPlayers(force);
+          await getPlayers(
+            force
+          );
+
 
         cachedStats = {
 
@@ -279,7 +667,10 @@ const HYUHYU = (() => {
 
           totalRace:
             players.reduce(
-              (sum, player) =>
+              (
+                sum,
+                player
+              ) =>
                 sum +
                 (
                   player.totalRace ||
@@ -292,9 +683,11 @@ const HYUHYU = (() => {
             players[0]?.bestTime ??
             null,
 
-          checkpoint: 2
+          checkpoint:
+            2
 
         };
+
 
         return cachedStats;
 
@@ -304,7 +697,7 @@ const HYUHYU = (() => {
 
 
   // =========================================================
-  // GET PLAYER
+  // GET ONE PLAYER
   // =========================================================
 
   const getPlayer =
@@ -315,15 +708,26 @@ const HYUHYU = (() => {
         return normalizePlayer(
 
           await request(
-            `/leaderboard/player/${encodeURIComponent(id)}`
+
+            `/leaderboard/player/${encodeURIComponent(
+              id
+            )}`
+
           )
 
         );
 
+
       } catch (error) {
+
+
+        // ===============================================
+        // FALLBACK DARI CACHE LEADERBOARD
+        // ===============================================
 
         const players =
           await getPlayers();
+
 
         const found =
           players.find(
@@ -332,9 +736,13 @@ const HYUHYU = (() => {
               String(id)
           );
 
+
         if (!found) {
+
           throw error;
+
         }
+
 
         return found;
 
@@ -354,33 +762,43 @@ const HYUHYU = (() => {
         .querySelectorAll(
           '[data-api-status]'
         )
-        .forEach(el => {
+        .forEach(
+          element => {
 
-          el.classList.toggle(
-            'online',
-            isOnline
-          );
+            element
+              .classList
+              .toggle(
+                'online',
+                isOnline
+              );
 
-          el.classList.toggle(
-            'offline',
-            !isOnline
-          );
 
-          const label =
-            el.querySelector(
-              '[data-status-label]'
-            );
+            element
+              .classList
+              .toggle(
+                'offline',
+                !isOnline
+              );
 
-          if (label) {
 
-            label.textContent =
-              isOnline
-                ? 'API ONLINE'
-                : 'API OFFLINE';
+            const label =
+              element
+                .querySelector(
+                  '[data-status-label]'
+                );
+
+
+            if (label) {
+
+              label.textContent =
+                isOnline
+                  ? 'API ONLINE'
+                  : 'API OFFLINE';
+
+            }
 
           }
-
-        });
+        );
 
     };
 
@@ -394,20 +812,32 @@ const HYUHYU = (() => {
 
       try {
 
-        await getPlayers(true);
+        await getPlayers(
+          true
+        );
 
-        setStatus(true);
+
+        setStatus(
+          true
+        );
+
 
         return true;
 
+
       } catch (error) {
+
 
         console.warn(
           'HYUHYU API unavailable:',
           error
         );
 
-        setStatus(false);
+
+        setStatus(
+          false
+        );
+
 
         return false;
 
@@ -417,52 +847,66 @@ const HYUHYU = (() => {
 
 
   // =========================================================
-  // ACTIVE NAV
+  // ACTIVE NAVIGATION
   // =========================================================
 
-  const activeNav = () => {
+  const activeNav =
+    () => {
 
-    const current =
-      location.pathname
-        .split('/')
-        .pop() ||
-      'index.html';
+      const current =
+        location.pathname
+          .split('/')
+          .pop() ||
+        'index.html';
 
-    document
-      .querySelectorAll(
-        '[data-nav]'
-      )
-      .forEach(link => {
 
-        link.classList.toggle(
-          'active',
-          link.getAttribute(
-            'href'
-          ) === current
+      document
+        .querySelectorAll(
+          '[data-nav]'
+        )
+        .forEach(
+          link => {
+
+            link
+              .classList
+              .toggle(
+
+                'active',
+
+                link.getAttribute(
+                  'href'
+                ) === current
+
+              );
+
+          }
         );
 
-      });
-
-  };
+    };
 
 
   // =========================================================
-  // FOOTER
+  // FOOTER YEAR
   // =========================================================
 
-  const renderFooterYear = () => {
+  const renderFooterYear =
+    () => {
 
-    document
-      .querySelectorAll(
-        '[data-year]'
-      )
-      .forEach(
-        el =>
-          el.textContent =
-            new Date().getFullYear()
-      );
+      document
+        .querySelectorAll(
+          '[data-year]'
+        )
+        .forEach(
+          element => {
 
-  };
+            element.textContent =
+              new Date()
+                .getFullYear();
+
+          }
+        );
+
+    };
 
 
   // =========================================================
@@ -470,56 +914,89 @@ const HYUHYU = (() => {
   // =========================================================
 
   const animateNumber =
-    (el, value) => {
+    (
+      element,
+      value
+    ) => {
 
       const target =
         Number(value);
 
-      if (!Number.isFinite(target)) {
 
-        el.textContent = '—';
+      if (
+        !Number.isFinite(
+          target
+        )
+      ) {
+
+        element.textContent =
+          '—';
 
         return;
 
       }
 
-      const duration = 650;
+
+      const duration =
+        650;
+
 
       const start =
         performance.now();
 
-      const from = 0;
+
+      const from =
+        0;
+
 
       const step =
         now => {
 
           const progress =
             Math.min(
-              (now - start) /
+
+              (
+                now -
+                start
+              ) /
               duration,
+
               1
+
             );
+
 
           const eased =
             1 -
             Math.pow(
-              1 - progress,
+              1 -
+              progress,
               3
             );
 
-          el.textContent =
+
+          element.textContent =
             Math.round(
+
               from +
+
               (
                 target -
                 from
               ) *
-              eased
-            ).toLocaleString(
-              'id-ID'
-            );
 
-          if (progress < 1) {
+              eased
+
+            )
+              .toLocaleString(
+                'id-ID'
+              );
+
+
+          if (
+            progress <
+            1
+          ) {
 
             requestAnimationFrame(
               step
@@ -529,7 +1006,10 @@ const HYUHYU = (() => {
 
         };
 
-      requestAnimationFrame(step);
+
+      requestAnimationFrame(
+        step
+      );
 
     };
 
@@ -543,6 +1023,7 @@ const HYUHYU = (() => {
     () => {
 
       activeNav();
+
       renderFooterYear();
 
     }
@@ -550,31 +1031,35 @@ const HYUHYU = (() => {
 
 
   // =========================================================
-  // PUBLIC
+  // PUBLIC FUNCTIONS
   // =========================================================
 
   return {
 
+    // API
     API_BASE,
 
+    // Avatar
     avatarUrl,
 
+    // QuickSort
+    quickSort,
+    quickSortNumbers,
+    sortPlayersByBestTime,
+
+    // Utilities
     formatTime,
-
     formatDate,
-
     escapeHTML,
 
+    // Data
     getPlayers,
-
     getStats,
-
     getPlayer,
 
+    // UI
     setStatus,
-
     ping,
-
     animateNumber
 
   };
